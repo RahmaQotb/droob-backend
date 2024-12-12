@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\Auth\UserAuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Dashboard Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -13,9 +18,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+Route::prefix("/dashboard")->group(function () {
+    Route::get("categories", function () {
+        return view("Dashboard.Categories.index");
+    });
 });
-
-
-require __DIR__."dashboard.php";
