@@ -1,10 +1,5 @@
 <?php
 
-use App\Http\Controllers\PromotionController;
-use App\Http\Controllers\Auth\UserAuthController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\PostController;
-use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
