@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +20,5 @@ Route::prefix("/dashboard")->group(function () {
     Route::get("categories", function () {
         return view("Dashboard.Categories.index");
     });
+    Route::resource('students' , StudentController::class);
 });
