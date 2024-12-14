@@ -1,0 +1,198 @@
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+     :root {
+        --first-color: #F0F0F0;
+        --second-color: white;
+        --th-color: #000000;
+        --fo-color: gray;
+    }
+    
+    a,
+    a:hover {
+        text-decoration: none;
+    }
+    
+    html,
+    body {
+        direction: rtl;
+        text-align: right;
+    }
+    
+    body {
+        font-family: 'Almarai', sans-serif;
+        background-color: var(--th-color);
+    }
+    /*start side area*/
+    
+    .side-area {
+        background-color: var(--th-color);
+        padding: 20px 22px;
+    }
+    
+    .side-area h4 {
+        text-align: center;
+        border: 2px double #cba95a;
+        padding: 8px 8px 10px 8px;
+        margin-bottom: 15px;
+        margin-top: 18px;
+        color: #cba95a;
+        border-radius: 5px;
+    }
+    
+    .nams {
+        padding: 5px 5px 5px 5px !important;
+    }
+    
+    .side-area a {
+        color: var(--th-color);
+    }
+    
+    .side-area ul {
+        list-style: none;
+    }
+    
+    .side-area ul li {
+        margin-bottom: 13px;
+        padding: 8px;
+        border: 1px solid #cba95a;
+        border-radius: 5px !important;
+    }
+    
+    .side-area ul li span:first-of-type {
+        margin-left: 4px;
+    }
+    
+    .side-area ul li:hover {
+        background: #cba95a;
+        transition: all 0.3s ease-in-out;
+    }
+    /*end side area*/
+    /*start add categories and posts*/
+    
+    .add {
+        margin-top: 30px;
+        background-color: var(--th-color);
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+    }
+    
+    .add h4 {
+        text-align: center;
+        font-weight: bold;
+        padding-bottom: 15px;
+        color: #cba95a;
+    }
+    
+    .add label {
+        font-weight: bold;
+        color: #cba95a;
+    }
+    
+    .add input,
+    .add select,
+    .add textarea {
+        padding: 7px;
+        background-color: #cba95a !important;
+        border: 0;
+        direction: rtl !important;
+        border-radius: 5px;
+    }
+    
+    .add .btn-custom {
+        background-color: #cba95a;
+        border: 1px solid var(--th-color);
+        border-radius: 3px;
+        color: var(--th-color);
+        padding: 5px 30px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 8px 50px;
+    }
+    
+    .add .btn-custom:hover {
+        background-color: var(--th-color);
+        border: 1px solid #cba95a;
+        color: #cba95a;
+        transition: all 0.3s ease-in-out;
+        /*end add categories and posts*/
+    }
+    /*table area*/
+    
+    .display-cat {
+        background-color: black;
+        margin-bottom: 30px;
+        border-radius: 4px !important;
+        overflow: scroll !important;
+    }
+    
+    .display-cat h4 {
+        text-align: center;
+        font-weight: bold;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        color: #CBA95A;
+    }
+    
+    .display-cat table {
+        border-radius: 5px !important;
+        border: 2px solid #CBA95A;
+        direction: rtl !important;
+    }
+    
+    .display-cat table th {
+        background-color: var(--th-color);
+        color: #CBA95A;
+        margin-right: 10px !important;
+        padding: 17px;
+        border-bottom: 1px solid black;
+    }
+    
+    .display-cat table th:first-of-type {
+        border-radius: 0 5px 0 0;
+    }
+    
+    .display-cat table th:last-of-type {
+        border-radius: 5px 0 0 0;
+    }
+    
+    .display-cat table td {
+        background-color: #CBA95A;
+        font-weight: bold;
+        border: 0;
+        direction: rtl !important;
+    }
+    
+    .display-cat table td a {
+        color: black;
+    }
+    /*table area*/
+    /*start log out*/
+    
+    .side-area ul .log {
+        padding: 0px;
+    }
+    
+    .log button {
+        border: 0;
+        padding: 6px;
+        width: 100%;
+        text-align: right;
+        background-color: var(--th-color);
+        border-radius: 5px;
+        border: 1px solid #cba95a;
+        color: #cba95a;
+    }
+    
+    .log button:hover {
+        background: #cba95a;
+        border: 1px solid black;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+        color: black
+    }
+    /*end log out*/
