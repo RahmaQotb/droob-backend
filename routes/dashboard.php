@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +20,6 @@ Route::prefix("/dashboard")->group(function () {
     Route::get("categories", function () {
         return view("Dashboard.Categories.index");
     });
+
+    Route::resource("subjects" , SubjectController::class);
 });

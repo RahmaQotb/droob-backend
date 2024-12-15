@@ -6,23 +6,9 @@
         class="sidebar-item  has-sub">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-pen-fill"></i>
-            <span>التصنيفات</span>
+            <span>الطلاب</span>
         </a>
-        
-        <ul class="submenu ">
-            
-            <li class="submenu-item  ">
-                <a href="{{route("categories.index")}}" class="submenu-link">كل التصنيفات</a>
-                
-            </li>
-            
-            <li class="submenu-item  ">
-                <a href="{{route("categories.create")}}" class="submenu-link">إضافة تصنيف</a>
-                
-            </li>
-            
-        </ul>
-        
+    
 
     </li>
         
@@ -30,18 +16,18 @@
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-pen-fill"></i>
-                <span>المقالات</span>
+                <span>نوع الاختبار</span>
             </a>
             
             <ul class="submenu ">
                 
                 <li class="submenu-item  ">
-                    <a href="{{route("posts.index")}}" class="submenu-link">كل المقالات</a>
+                    <a href="{{route("subjects.index")}}" class="submenu-link">كل الاختبارات</a>
                     
                 </li>
                 
                 <li class="submenu-item  ">
-                    <a href="{{route("posts.create")}}" class="submenu-link">إضافة مقال</a>
+                    <a href="{{route("subjects.create")}}" class="submenu-link">إضافة اختبار</a>
                     
                 </li>
                 
@@ -108,12 +94,12 @@
             <ul class="submenu ">
                 
                 <li class="submenu-item  ">
-                    <a href="{{route('promotions.index')}}" class="submenu-link">كل العروض الترويجية</a>
+                    <a href="" class="submenu-link">كل العروض الترويجية</a>
                     
                 </li>
                 
                 <li class="submenu-item  ">
-                    <a href="{{route('promotions.create')}}" class="submenu-link">اضافة عرض ترويجي</a>
+                    <a href="" class="submenu-link">اضافة عرض ترويجي</a>
                     
                 </li>
                 
@@ -157,7 +143,7 @@
 
         <li
             class="sidebar-item  ">
-            <a href="{{route('change-password-function')}}" class='sidebar-link'>
+            <a href="" class='sidebar-link'>
                 <i class="bi bi-person-badge-fill"></i>
                 <span>تغيير كلمة المرور</span>
             </a>
@@ -166,7 +152,7 @@
         </li>
         <li
             class="sidebar-item  ">
-            <a href="{{route('logout')}}" class='sidebar-link'>
+            <a href="" class='sidebar-link'>
                 <i class="bi bi-person-badge-fill"></i>
                 <span>تسجيل الخروج</span>
             </a>
