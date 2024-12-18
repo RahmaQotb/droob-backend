@@ -36,13 +36,13 @@ class AuthController extends Controller
             "email"=>$request->email,
             "password"=>$password,
         ]);
-        $token = $user->createToken("API TOKEN OF ". $user->name)->plainTextToken;
+        // $token = $user->createToken("API TOKEN OF ". $user->name)->plainTextToken;
 
         return response()->json([
             "message"=>"Registration Done Successfully .",
             "status"=>200,
             "data"=>$user,
-            "token"=>$token
+            // "token"=>$token
         ],200);
     }
 
@@ -68,7 +68,7 @@ class AuthController extends Controller
         if($user && $password){
         if($user->tokens()->count()>0) return response()->json(["message"=>"already logged in ."],300);
             return response()->json([
-                "message"=>"Registration Done Successfully .",
+                "message"=>"Login Done Successfully .",
                 "status"=>200,
                 "data"=>$user,
                 "token"=>$user->createToken("API TOKEN OF ". $user->name)->plainTextToken
