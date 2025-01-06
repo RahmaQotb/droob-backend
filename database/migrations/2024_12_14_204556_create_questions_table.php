@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger(column: 'exam_id');
-            $table->foreign("exam_id")->references("id")->on("exams")->onDelete("cascade");
-            $table->text("head_question_text")->unique();
-            $table->string("head_question_image",255)->nullable();
-            $table->text("correct_answer");
+            $table->foreignId('exam_id')->constrained()->onDelete('cascade');
+            $table->enum('type', ['mcq', 'true_false', 'ordering', 'passage']);
+            $table->text('text')->nullable();
+            $table->string('image')->nullable();
+            $table->foreignId('parent_question_id')->nullable()->constrained('questions')->onDelete('cascade');
             $table->timestamps();
         });
     }
