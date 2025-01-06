@@ -3,10 +3,10 @@
         <li class="sidebar-title">القائمة</li>
         
         <li
-        class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
+        class="sidebar-item  ">
+        <a href="{{route("students.index")}}" class='sidebar-link'>
             <i class="bi bi-pen-fill"></i>
-            <span>التصنيفات</span>
+            <span>الطلاب</span>
         </a>
         
         <ul class="submenu ">
@@ -37,10 +37,12 @@
                 
                 <li class="submenu-item  ">
                     <a href="" class="submenu-link">كل المقالات</a>
+                    <a href="" class="submenu-link">كل المقالات</a>
                     
                 </li>
                 
                 <li class="submenu-item  ">
+                    <a href="" class="submenu-link">إضافة مقال</a>
                     <a href="" class="submenu-link">إضافة مقال</a>
                     
                 </li>
@@ -109,10 +111,12 @@
                 
                 <li class="submenu-item  ">
                     <a href="" class="submenu-link">كل العروض الترويجية</a>
+                    <a href="" class="submenu-link">كل العروض الترويجية</a>
                     
                 </li>
                 
                 <li class="submenu-item  ">
+                    <a href="" class="submenu-link">اضافة عرض ترويجي</a>
                     <a href="" class="submenu-link">اضافة عرض ترويجي</a>
                     
                 </li>
@@ -158,6 +162,7 @@
         <li
             class="sidebar-item  ">
             <a href="" class='sidebar-link'>
+            <a href="" class='sidebar-link'>
                 <i class="bi bi-person-badge-fill"></i>
                 <span>تغيير كلمة المرور</span>
             </a>
@@ -166,6 +171,7 @@
         </li>
         <li
             class="sidebar-item  ">
+            <a href="" class='sidebar-link'>
             <a href="" class='sidebar-link'>
                 <i class="bi bi-person-badge-fill"></i>
                 <span>تسجيل الخروج</span>
