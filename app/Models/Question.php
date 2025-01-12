@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        "exam_id","head_question_text","head_question_image","correct_answer"
-    ];
+    protected $guarded = [];
+    protected $casts = ['text'];
+    
     public function exam(){
         return $this->belongsTo(Exam::class);
     }
-    public function sub_questions(){
-        return $this->hasMany(SubQuestion::class);
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }

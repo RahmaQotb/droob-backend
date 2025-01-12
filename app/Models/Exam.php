@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Exam extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        "subject_id"
-    ];
+    protected $guarded =[];
+
     public function subject(){
         return $this->belongsTo(Subject::class);
     }

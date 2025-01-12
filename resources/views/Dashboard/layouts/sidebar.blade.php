@@ -6,23 +6,9 @@
         class="sidebar-item  has-sub">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-pen-fill"></i>
-            <span>التصنيفات</span>
+            <span>الطلاب</span>
         </a>
-        
-        <ul class="submenu ">
-            
-            <li class="submenu-item  ">
-                <a href="" class="submenu-link">كل التصنيفات</a>
-                
-            </li>
-            
-            <li class="submenu-item  ">
-                <a href="" class="submenu-link">إضافة تصنيف</a>
-                
-            </li>
-            
-        </ul>
-        
+    
 
     </li>
         
@@ -30,18 +16,18 @@
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-pen-fill"></i>
-                <span>المقالات</span>
+                <span>المادة</span>
             </a>
             
             <ul class="submenu ">
                 
                 <li class="submenu-item  ">
-                    <a href="" class="submenu-link">كل المقالات</a>
+                    <a href="{{route("subjects.index")}}" class="submenu-link">كل المواد    </a>
                     
                 </li>
                 
                 <li class="submenu-item  ">
-                    <a href="" class="submenu-link">إضافة مقال</a>
+                    <a href="{{route("subjects.create")}}" class="submenu-link">إضافة مادة</a>
                     
                 </li>
                 
@@ -55,18 +41,18 @@
                 <i class="iconly-boldProfile">
 
                 </i>
-                <span>الشركاء</span>
+                <span>الامتحانات</span>
             </a>
             
             <ul class="submenu ">
                 
                 <li class="submenu-item  ">
-                    <a href="component-accordion.html" class="submenu-link">كل الشركاء</a>
+                    <a href="{{route("exams.index")}}" class="submenu-link">كل الامتحانات</a>
                     
                 </li>
                 
                 <li class="submenu-item  ">
-                    <a href="component-alert.html" class="submenu-link">اضافة شريك</a>
+                    <a href="{{route("exams.create")}}" class="submenu-link">اضافة امتحان</a>
                     
                 </li>
                 
@@ -98,7 +84,7 @@
             
 
         </li>
-        <li
+        {{-- <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-cash"></i>
@@ -120,14 +106,14 @@
             </ul>
             
 
-        </li>
+        </li> --}}
         
-        <li
+        {{-- <li
         class="sidebar-item  has-sub">
         <a href="#" class='sidebar-link'>
             <i class="iconly-boldProfile"></i>
             <span>الفريق</span>
-        </a>
+        </a> --}}
         
         <ul class="submenu ">
             
