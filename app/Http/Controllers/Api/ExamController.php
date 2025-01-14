@@ -48,8 +48,18 @@ class ExamController extends Controller
      */
     public function getExam($id)
     {
-        $exam = Exam::with(['subject', 'questions.answers'])->findOrFail($id);
-        return new ExamResource($exam);
+        $exam = Exam::with(['subject', 'questions.answers'])->find($id);
+        if(!$exam){
+            return response()->json([
+                "success"=>false,
+                "message"=>"exam not found",
+            ],300);
+        }
+        return response()->json([
+            "success"=>true,
+            "message"=>"exam retrived successfully",
+            "data"=> new ExamResource($exam),
+        ],200);
     }
 
     // ==================== Questions ====================

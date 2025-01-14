@@ -21,8 +21,6 @@ class QuestionResource extends JsonResource
             'text' => $this->text,
             'image' => $this->image,
             'parent_question_id' => $this->parent_question_id,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'answers' => AnswerResource::collection($this->whenLoaded('answers')), // إذا كانت العلاقة محملة
         ];
     }

@@ -19,8 +19,6 @@ class ExamResource extends JsonResource
             'subject_id' => $this->subject_id,
             'name' => $this->name,
             'description' => $this->description,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'questions' => QuestionResource::collection($this->whenLoaded('questions')), // إذا كانت العلاقة محملة
         ];
     }

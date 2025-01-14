@@ -21,8 +21,6 @@ class AnswerResource extends JsonResource
             'image' => $this->image,
             'is_correct' => $this->is_correct,
             'order' => $this->order,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
         ];
     }
 }

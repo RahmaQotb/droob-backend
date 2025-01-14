@@ -25,7 +25,7 @@ Route::get('/subjects/{id}', [ExamController::class, 'getSubject']); // عرض �
 
 // Routes for Exams (Read-only)
 Route::get('/exams', [ExamController::class, 'getExams']); // عرض جميع الامتحانات
-Route::get('/exams/{id}', [ExamController::class, 'getExam']); // عرض امتحان معين
+Route::get('/exam/{id}', [ExamController::class, 'getExam']); // عرض امتحان معين
 
 // Routes for Questions (Read-only)
 Route::get('/questions', [ExamController::class, 'getQuestions']); // عرض جميع الأسئلة
