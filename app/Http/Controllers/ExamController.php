@@ -6,7 +6,7 @@ use App\Models\Exam;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Traits\ImageUpload;
-use Illuminate\Validation\Rule;
+
 
 class ExamController extends Controller
 {
