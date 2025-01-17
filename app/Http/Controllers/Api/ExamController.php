@@ -11,6 +11,7 @@ use App\Models\Subject;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Answer;
+use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
@@ -95,5 +96,63 @@ class ExamController extends Controller
     {
         $answer = Answer::with(['question'])->findOrFail($id);
         return new AnswerResource($answer);
+    }
+
+
+
+    public function calculateGrade(Request $request, Exam $exam)
+    {
+        
+        $validated = $request->validate([
+            'answers' => 'required|array', 
+            'answers.*.question_id' => 'required|exists:questions,id', 
+            'answers.*.answer_id' => 'nullable|exists:answers,id', 
+            'answers.*.order' => 'nullable|array', 
+        ]);
+    
+        $totalQuestions = $exam->questions->count(); 
+        $gradePerQuestion = 100 / $totalQuestions; 
+        $totalScore = 0; 
+    
+        
+        foreach ($exam->questions as $question) {
+            $studentAnswer = collect($validated['answers'])->firstWhere('question_id', $question->id);
+    
+            if ($studentAnswer) {
+                switch ($question->type) {
+                    case 'mcq':
+                    case 'true_false':
+                        $correctAnswer = $question->answers->firstWhere('is_correct', true);
+                        if ($correctAnswer && $studentAnswer['answer_id'] == $correctAnswer->id) {
+                            $totalScore += $gradePerQuestion; 
+                        }
+                        break;
+    
+                    case 'ordering':
+                        $correctOrder = $question->answers->sortBy('order')->pluck('id')->toArray();
+                        if ($studentAnswer['order'] === $correctOrder) {
+                            $totalScore += $gradePerQuestion;
+                        }
+                        break;
+    
+                    default:
+                       
+                        break;
+                }
+            }
+        }
+       
+        $percentageScore = round($totalScore, 2); 
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Grade calculated successfully.',
+            'data' => [
+                'total_questions' => $totalQuestions,
+                'correct_answers' => $totalScore / $gradePerQuestion,
+                'total_score' => $totalScore,
+                'percentage_score' => $percentageScore . '%',
+            ],
+        ]);
     }
 }

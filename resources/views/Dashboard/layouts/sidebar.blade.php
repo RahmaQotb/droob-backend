@@ -61,7 +61,7 @@
 
         </li>
        
-        <li
+        {{-- <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-chat-dots-fill"></i>
@@ -83,7 +83,7 @@
             </ul>
             
 
-        </li>
+        </li> --}}
         {{-- <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>

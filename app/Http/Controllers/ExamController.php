@@ -183,4 +183,7 @@ class ExamController extends Controller
  
         return redirect()->route("exams.index")->with("success", "الامتحان تم حذفه بنجاح");
     }
+
+  
+
 }
