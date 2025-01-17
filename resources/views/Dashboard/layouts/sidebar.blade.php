@@ -3,8 +3,8 @@
         <li class="sidebar-title">القائمة</li>
         
         <li
-        class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
+        class="sidebar-item  ">
+        <a href="{{route("students.index")}}" class='sidebar-link'>
             <i class="bi bi-pen-fill"></i>
             <span>الطلاب</span>
         </a>
