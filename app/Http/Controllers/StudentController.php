@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Validator;
 
 class StudentController extends Controller
 {
@@ -27,7 +28,24 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request) {
+        $validator = Validator::make($request->all(),[
+            "name"=>"required|string|max:255",
+            "gender"=>"required|in:male,female",
+            "level"=>"required|string|in:4,5,6",
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                "message"=>"failed data entered",
+                "data"=>$validator->errors()
+            ],300);
+        }
+        $student = Student::create($request->validated());
+        return response()->json([
+            "message"=>"student created successfully",
+            "data"=>$student
+        ],200);
+    }
 
     /**
      * Display the specified resource.

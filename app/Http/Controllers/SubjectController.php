@@ -71,7 +71,7 @@ class SubjectController extends Controller
     {
         $validated = $request->validate(
             [
-                'name' => 'required|string|max:255|unique:subjects',
+                'name' => 'required|string|max:255|unique:subjects,name,'.$id,
                 'desc' => 'nullable|string',
             ],
 
@@ -99,6 +99,6 @@ class SubjectController extends Controller
         $subject = Subject::findOrFail($id);
         $subject->delete();
 
-        $subjects = Subject::all();
+        // $subjects = Subject::all();
         return redirect()->route('subjects.index')->with('success', 'تم حذف المادة بنجاح.');    }
 }

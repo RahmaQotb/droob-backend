@@ -30,7 +30,7 @@
         </div>
         <div style="display: flex; gap: 10px; margin-top: 5px; margin-left: 50px;  justify-content: flex-end">
             <a href="{{route('subjects.create')}}" class="btn  btn-success" rel="noopener noreferrer">
-                إضافة ماده
+                إضافة مادة
             </a>
         </div>
         <div class="card-body">

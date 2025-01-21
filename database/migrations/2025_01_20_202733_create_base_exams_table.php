@@ -11,21 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('base_exams', function (Blueprint $table) {
             $table->id();
-            $table->string("name",255);
-            $table->enum("level",[4,5,6]);
-            $table->enum("intelligence_level_status",["success","failed"])->default('failed');
+            $table->enum('name',['white','blue']);
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('base_exams');
     }
 };

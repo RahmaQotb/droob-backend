@@ -4,6 +4,7 @@
 <?php
 
 use App\Http\Controllers\Api\ExamController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -46,3 +47,5 @@ Route::get('/questions/{id}', [ExamController::class, 'getQuestion']); // عرض
 // Routes for Answers (Read-only)
 Route::get('/answers', [ExamController::class, 'getAnswers']); // عرض جميع الإجابات
 Route::get('/answers/{id}', [ExamController::class, 'getAnswer']);
+
+Route::post('/student',[StudentController::class,"store"]);
