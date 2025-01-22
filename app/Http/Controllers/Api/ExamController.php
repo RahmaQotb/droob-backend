@@ -100,59 +100,105 @@ class ExamController extends Controller
 
 
 
-    public function calculateGrade(Request $request, Exam $exam)
-    {
-        
-        $validated = $request->validate([
-            'answers' => 'required|array', 
-            'answers.*.question_id' => 'required|exists:questions,id', 
-            'answers.*.answer_id' => 'nullable|exists:answers,id', 
-            'answers.*.order' => 'nullable|array', 
-        ]);
-    
-        $totalQuestions = $exam->questions->count(); 
-        $gradePerQuestion = 100 / $totalQuestions; 
-        $totalScore = 0; 
-    
-        
-        foreach ($exam->questions as $question) {
-            $studentAnswer = collect($validated['answers'])->firstWhere('question_id', $question->id);
-    
-            if ($studentAnswer) {
-                switch ($question->type) {
-                    case 'mcq':
-                    case 'true_false':
-                        $correctAnswer = $question->answers->firstWhere('is_correct', true);
-                        if ($correctAnswer && $studentAnswer['answer_id'] == $correctAnswer->id) {
-                            $totalScore += $gradePerQuestion; 
-                        }
-                        break;
-    
-                    case 'ordering':
-                        $correctOrder = $question->answers->sortBy('order')->pluck('id')->toArray();
-                        if ($studentAnswer['order'] === $correctOrder) {
-                            $totalScore += $gradePerQuestion;
-                        }
-                        break;
-    
-                    default:
-                       
-                        break;
+  
+public function ExamCorrection(Request $request, $examId)
+{
+    // Validate the request
+    $request->validate([
+        'answers' => 'required|array',
+    ]);
+
+    // Fetch the exam and its questions
+    $exam = Exam::findOrFail($examId);
+    $questions = Question::where('exam_id', $examId)->get();
+
+    // Calculate the degree for each question
+    $totalQuestions = $questions->count();
+    $degreePerQuestion = 100 / $totalQuestions; // Degrees per question
+    $totalScore = 0;
+
+    // Iterate through each question and check the student's answer
+    foreach ($questions as $question) {
+        $questionId = $question->id;
+        $questionType = $question->type;
+
+        // Get the student's answer for this question
+        $studentAnswer = $request->input("answers.$questionId");
+
+        // Handle different question types
+        switch ($questionType) {
+            case 'mcq':
+            case 'true_false':
+                // For MCQ and True/False, check if the student's answer is correct
+                $correctAnswer = Answer::where('question_id', $questionId)
+                    ->where('is_correct', true)
+                    ->first();
+
+                if ($correctAnswer && $studentAnswer == $correctAnswer->id) {
+                    $totalScore += $degreePerQuestion;
                 }
-            }
+                break;
+
+            case 'ordering':
+                // For ordering questions, check if the student's order matches the correct order
+                $correctOrder = Answer::where('question_id', $questionId)
+                    ->orderBy('order')
+                    ->pluck('id')
+                    ->toArray();
+
+                $studentOrder = array_keys($studentAnswer); // Get the student's order
+                if ($studentOrder == $correctOrder) {
+                    $totalScore += $degreePerQuestion;
+                }
+                break;
+
+            case 'passage':
+                // For passage questions, handle subquestions
+                $subQuestions = Question::where('parent_question_id', $questionId)->get();
+                $subQuestionDegree = $degreePerQuestion / $subQuestions->count();
+
+                foreach ($subQuestions as $subQuestion) {
+                    $subQuestionId = $subQuestion->id;
+                    $subQuestionType = $subQuestion->type;
+
+                    // Get the student's answer for this subquestion
+                    $subQuestionAnswer = $request->input("answers.$subQuestionId");
+
+                    // Handle subquestion types
+                    switch ($subQuestionType) {
+                        case 'mcq':
+                        case 'true_false':
+                            // For MCQ and True/False, check if the student's answer is correct
+                            $correctSubAnswer = Answer::where('question_id', $subQuestionId)
+                                ->where('is_correct', true)
+                                ->first();
+
+                            if ($correctSubAnswer && $subQuestionAnswer == $correctSubAnswer->id) {
+                                $totalScore += $subQuestionDegree;
+                            }
+                            break;
+
+                        case 'ordering':
+                            // For ordering subquestions, check if the student's order matches the correct order
+                            $correctSubOrder = Answer::where('question_id', $subQuestionId)
+                                ->orderBy('order')
+                                ->pluck('id')
+                                ->toArray();
+
+                            $studentSubOrder = array_keys($subQuestionAnswer); // Get the student's order
+                            if ($studentSubOrder == $correctSubOrder) {
+                                $totalScore += $subQuestionDegree;
+                            }
+                            break;
+                    }
+                }
+                break;
         }
-       
-        $percentageScore = round($totalScore, 2); 
-    
-        return response()->json([
-            'success' => true,
-            'message' => 'Grade calculated successfully.',
-            'data' => [
-                'total_questions' => $totalQuestions,
-                'correct_answers' => $totalScore / $gradePerQuestion,
-                'total_score' => $totalScore,
-                'percentage_score' => $percentageScore . '%',
-            ],
-        ]);
     }
+
+    // Return the total score to a Blade view
+    return response()->json([
+        "message"=>"Exam correction done",
+        'total_score' => $totalScore,]
+        ,200);}
 }

@@ -70,6 +70,10 @@
             border-left: 2px solid #4a90e2;
             padding-left: 20px;
         }
+        .btn-left {
+            float: left;
+            margin-right: 10px;
+        }
     </style>
 @endsection
 
@@ -99,14 +103,14 @@
                 @method('PUT')
                 <div class="form-group mb-4">
                     <label for="name"><i class="fas fa-book"></i> اسم الامتحان:</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{{ $exam->name }}" required>
+                    <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $exam->name) }}" required>
                 </div>
                 <div class="form-group mb-4">
                     <label for="subject_id"><i class="fas fa-book-open"></i> المادة الدراسية:</label>
                     <select name="subject_id" id="subject_id" class="form-control" required>
                         <option value="">اختر المادة الدراسية</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" {{ $exam->subject_id == $subject->id ? 'selected' : '' }}>
+                            <option value="{{ $subject->id }}" {{ old('subject_id', $exam->subject_id) == $subject->id ? 'selected' : '' }}>
                                 {{ $subject->name }}
                             </option>
                         @endforeach
@@ -116,27 +120,27 @@
                 <!-- قسم إضافة الأسئلة -->
                 <div id="questions-section">
                     <h5 class="mt-4 mb-3"><i class="fas fa-question-circle"></i> تعديل الأسئلة</h5>
-                    @foreach($exam->questions as $questionIndex => $question)
+                    @foreach($exam->questions as $index => $question)
                         <div class="question">
-                            <button type="button" class="btn btn-danger btn-sm remove-question"><i class="fas fa-trash"></i> حذف السؤال</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-question btn-left"><i class="fas fa-trash"></i> حذف السؤال</button>
                             <div class="form-group">
                                 <label for="question_text"><i class="fas fa-pencil-alt"></i> نص السؤال:</label>
-                                <input type="text" name="questions[{{ $questionIndex }}][text]" class="form-control" value="{{ $question->text }}" required>
+                                <input type="text" name="questions[{{ $index }}][text]" class="form-control" value="{{ old('questions.'.$index.'.text', $question->text) }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="question_type"><i class="fas fa-list"></i> نوع السؤال:</label>
-                                <select name="questions[{{ $questionIndex }}][type]" class="form-control question-type" required>
-                                    <option value="mcq" {{ $question->type == 'mcq' ? 'selected' : '' }}>اختيار من متعدد</option>
-                                    <option value="true_false" {{ $question->type == 'true_false' ? 'selected' : '' }}>صح/خطأ</option>
-                                    <option value="ordering" {{ $question->type == 'ordering' ? 'selected' : '' }}>ترتيب</option>
-                                    <option value="passage" {{ $question->type == 'passage' ? 'selected' : '' }}>نص (Passage)</option>
+                                <select name="questions[{{ $index }}][type]" class="form-control question-type" required>
+                                    <option value="mcq" {{ old('questions.'.$index.'.type', $question->type) == 'mcq' ? 'selected' : '' }}>اختيار من متعدد</option>
+                                    <option value="true_false" {{ old('questions.'.$index.'.type', $question->type) == 'true_false' ? 'selected' : '' }}>صح/خطأ</option>
+                                    <option value="ordering" {{ old('questions.'.$index.'.type', $question->type) == 'ordering' ? 'selected' : '' }}>ترتيب</option>
+                                    <option value="passage" {{ old('questions.'.$index.'.type', $question->type) == 'passage' ? 'selected' : '' }}>نص (Passage)</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="question_image"><i class="fas fa-image"></i> صورة السؤال (اختياري):</label>
-                                <input type="file" name="questions[{{ $questionIndex }}][image]" class="form-control">
+                                <input type="file" name="questions[{{ $index }}][image]" class="form-control">
                                 @if($question->image)
-                                    <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" class="img-thumbnail mt-2" style="max-width: 200px;">
+                                    <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" width="100" class="mt-2">
                                 @endif
                             </div>
 
@@ -147,102 +151,100 @@
                                     <div class="answer">
                                         <div class="form-group">
                                             <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                                            <input type="text" name="questions[{{ $questionIndex }}][answers][{{ $answerIndex }}][text]" class="form-control" value="{{ $answer->text }}">
+                                            <input type="text" name="questions[{{ $index }}][answers][{{ $answerIndex }}][text]" class="form-control" value="{{ old('questions.'.$index.'.answers.'.$answerIndex.'.text', $answer->text) }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                                            <input type="file" name="questions[{{ $questionIndex }}][answers][{{ $answerIndex }}][image]" class="form-control">
+                                            <input type="file" name="questions[{{ $index }}][answers][{{ $answerIndex }}][image]" class="form-control">
                                             @if($answer->image)
-                                                <img src="{{ asset('storage/' . $answer->image) }}" alt="Answer Image" class="img-thumbnail mt-2" style="max-width: 200px;">
+                                                <img src="{{ asset('storage/' . $answer->image) }}" alt="Answer Image" width="100" class="mt-2">
                                             @endif
                                         </div>
                                         <div class="form-group">
                                             <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                                            <select name="questions[{{ $questionIndex }}][answers][{{ $answerIndex }}][is_correct]" class="form-control" required>
-                                                <option value="0" {{ $answer->is_correct == 0 ? 'selected' : '' }}>خطأ</option>
-                                                <option value="1" {{ $answer->is_correct == 1 ? 'selected' : '' }}>صح</option>
+                                            <select name="questions[{{ $index }}][answers][{{ $answerIndex }}][is_correct]" class="form-control" required>
+                                                <option value="0" {{ old('questions.'.$index.'.answers.'.$answerIndex.'.is_correct', $answer->is_correct) == 0 ? 'selected' : '' }}>خطأ</option>
+                                                <option value="1" {{ old('questions.'.$index.'.answers.'.$answerIndex.'.is_correct', $answer->is_correct) == 1 ? 'selected' : '' }}>صح</option>
                                             </select>
                                         </div>
-                                        <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                                        <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
                                     </div>
                                 @endforeach
                             </div>
 
                             <!-- زر إضافة إجابة جديدة (لأسئلة غير النصية) -->
-                            <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn" data-question-type="{{ $question->type }}"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+                            <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn btn-left" data-question-type="{{ $question->type }}"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
 
                             <!-- قسم إضافة الأسئلة الفرعية (للنص) -->
-                            @if($question->type == 'passage')
-                                <div class="passage-questions" data-question-type="passage">
-                                    <h6><i class="fas fa-question"></i> تعديل الأسئلة الفرعية للنص</h6>
-                                    @foreach($question->subQuestions as $subQuestionIndex => $subQuestion)
-                                        <div class="sub-question">
-                                            <button type="button" class="btn btn-danger btn-sm remove-sub-question"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
-                                            <div class="form-group">
-                                                <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
-                                                <input type="text" name="questions[{{ $questionIndex }}][sub_questions][{{ $subQuestionIndex }}][text]" class="form-control" value="{{ $subQuestion->text }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sub_question_image"><i class="fas fa-image"></i> صورة السؤال الفرعي (اختياري):</label>
-                                                <input type="file" name="questions[{{ $questionIndex }}][sub_questions][{{ $subQuestionIndex }}][image]" class="form-control">
-                                                @if($subQuestion->image)
-                                                    <img src="{{ asset('storage/' . $subQuestion->image) }}" alt="Sub-Question Image" class="img-thumbnail mt-2" style="max-width: 200px;">
-                                                @endif
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sub_question_type"><i class="fas fa-list"></i> نوع السؤال الفرعي:</label>
-                                                <select name="questions[{{ $questionIndex }}][sub_questions][{{ $subQuestionIndex }}][type]" class="form-control" required>
-                                                    <option value="mcq" {{ $subQuestion->type == 'mcq' ? 'selected' : '' }}>اختيار من متعدد</option>
-                                                    <option value="true_false" {{ $subQuestion->type == 'true_false' ? 'selected' : '' }}>صح/خطأ</option>
-                                                    <option value="ordering" {{ $subQuestion->type == 'ordering' ? 'selected' : '' }}>ترتيب</option>
-                                                </select>
-                                            </div>
-                                            <div class="answers-section">
-                                                <h6><i class="fas fa-list-ol"></i> تعديل الإجابات</h6>
-                                                @foreach($subQuestion->answers as $subAnswerIndex => $subAnswer)
-                                                    <div class="answer">
-                                                        <div class="form-group">
-                                                            <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                                                            <input type="text" name="questions[{{ $questionIndex }}][sub_questions][{{ $subQuestionIndex }}][answers][{{ $subAnswerIndex }}][text]" class="form-control" value="{{ $subAnswer->text }}">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                                                            <input type="file" name="questions[{{ $questionIndex }}][sub_questions][{{ $subQuestionIndex }}][answers][{{ $subAnswerIndex }}][image]" class="form-control">
-                                                            @if($subAnswer->image)
-                                                                <img src="{{ asset('storage/' . $subAnswer->image) }}" alt="Sub-Answer Image" class="img-thumbnail mt-2" style="max-width: 200px;">
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                                                            <select name="questions[{{ $questionIndex }}][sub_questions][{{ $subQuestionIndex }}][answers][{{ $subAnswerIndex }}][is_correct]" class="form-control" required>
-                                                                <option value="0" {{ $subAnswer->is_correct == 0 ? 'selected' : '' }}>خطأ</option>
-                                                                <option value="1" {{ $subAnswer->is_correct == 1 ? 'selected' : '' }}>صح</option>
-                                                            </select>
-                                                        </div>
-                                                        <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
-                                            <button type="button" class="btn btn-secondary btn-sm add-sub-answer"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+                            <div class="passage-questions" data-question-type="passage" style="{{ $question->type == 'passage' ? 'display: block;' : 'display: none;' }}">
+                                <h6><i class="fas fa-question"></i> الأسئلة الفرعية للنص</h6>
+                                @foreach($question->subQuestions ?? [] as $subQuestionIndex => $subQuestion)
+                                 <!-- Your sub-question code here -->
+                               
+                                    <div class="sub-question">
+                                        <button type="button" class="btn btn-danger btn-sm remove-sub-question btn-left"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
+                                        <div class="form-group">
+                                            <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
+                                            <input type="text" name="questions[{{ $index }}][sub_questions][{{ $subQuestionIndex }}][text]" class="form-control" value="{{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.text', $subQuestion->text) }}">
                                         </div>
-                                    @endforeach
-                                </div>
-                            @endif
+                                        <div class="form-group">
+                                            <label for="sub_question_image"><i class="fas fa-image"></i> صورة السؤال الفرعي (اختياري):</label>
+                                            <input type="file" name="questions[{{ $index }}][sub_questions][{{ $subQuestionIndex }}][image]" class="form-control">
+                                            @if($subQuestion->image)
+                                                <img src="{{ asset('storage/' . $subQuestion->image) }}" alt="Sub Question Image" width="100" class="mt-2">
+                                            @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="sub_question_type"><i class="fas fa-list"></i> نوع السؤال الفرعي:</label>
+                                            <select name="questions[{{ $index }}][sub_questions][{{ $subQuestionIndex }}][type]" class="form-control" required>
+                                                <option value="mcq" {{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.type', $subQuestion->type) == 'mcq' ? 'selected' : '' }}>اختيار من متعدد</option>
+                                                <option value="true_false" {{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.type', $subQuestion->type) == 'true_false' ? 'selected' : '' }}>صح/خطأ</option>
+                                                <option value="ordering" {{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.type', $subQuestion->type) == 'ordering' ? 'selected' : '' }}>ترتيب</option>
+                                            </select>
+                                        </div>
+                                        <div class="answers-section">
+                                            <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
+                                            @foreach($subQuestion->answers as $subAnswerIndex => $subAnswer)
+                                                <div class="answer">
+                                                    <div class="form-group">
+                                                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                                                        <input type="text" name="questions[{{ $index }}][sub_questions][{{ $subQuestionIndex }}][answers][{{ $subAnswerIndex }}][text]" class="form-control" value="{{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.answers.'.$subAnswerIndex.'.text', $subAnswer->text) }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
+                                                        <input type="file" name="questions[{{ $index }}][sub_questions][{{ $subQuestionIndex }}][answers][{{ $subAnswerIndex }}][image]" class="form-control">
+                                                        @if($subAnswer->image)
+                                                            <img src="{{ asset('storage/' . $subAnswer->image) }}" alt="Sub Answer Image" width="100" class="mt-2">
+                                                        @endif
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
+                                                        <select name="questions[{{ $index }}][sub_questions][{{ $subQuestionIndex }}][answers][{{ $subAnswerIndex }}][is_correct]" class="form-control" required>
+                                                            <option value="0" {{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.answers.'.$subAnswerIndex.'.is_correct', $subAnswer->is_correct) == 0 ? 'selected' : '' }}>خطأ</option>
+                                                            <option value="1" {{ old('questions.'.$index.'.sub_questions.'.$subQuestionIndex.'.answers.'.$subAnswerIndex.'.is_correct', $subAnswer->is_correct) == 1 ? 'selected' : '' }}>صح</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
+                                        <button type="button" class="btn btn-secondary btn-sm add-sub-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+                                    </div>
+                                @endforeach
+                            </div>
 
                             <!-- زر إضافة سؤال فرعي جديد (للنص) -->
-                            @if($question->type == 'passage')
-                                <button type="button" class="btn btn-secondary btn-sm add-sub-question"><i class="fas fa-plus"></i> إضافة سؤال فرعي</button>
-                            @endif
+                            <button type="button" class="btn btn-secondary btn-sm add-sub-question btn-left" style="{{ $question->type == 'passage' ? 'display: inline-block;' : 'display: none;' }}"><i class="fas fa-plus"></i> إضافة سؤال فرعي</button>
                         </div>
                     @endforeach
                 </div>
 
                 <!-- زر إضافة سؤال جديد -->
-                <button type="button" id="add-question" class="btn btn-secondary mt-3 add-question-btn"><i class="fas fa-plus"></i> إضافة سؤال جديد</button>
+                <button type="button" id="add-question" class="btn btn-secondary mt-3 add-question-btn btn-left"><i class="fas fa-plus"></i> إضافة سؤال جديد</button>
 
                 <!-- زر تعديل الامتحان -->
-                <button type="submit" class="btn btn-success mt-4"><i class="fas fa-save"></i> تعديل الامتحان</button>
+                <button type="submit" class="btn btn-success mt-4"><i class="fas fa-save"></i> حفظ التعديلات</button>
             </form>
         </div>
     </div>
@@ -250,16 +252,17 @@
 
 <!-- JavaScript لإضافة أسئلة وإجابات جديدة -->
 <script>
-    let questionIndex = {{ count($exam->questions) }};
-    let answerIndex = {{ $exam->questions->sum(fn($q) => count($q->answers)) }};
-    let subQuestionIndex = {{ $exam->questions ? $exam->questions->sum(fn($q) => $q->subQuestions ? count($q->subQuestions) : 0) : 0 }};
+    let questionIndex = {{ $exam->questions->count() }};
+    let answerIndex = {{ $exam->questions->flatMap->answers->count() }};
+    let subQuestionIndex = {{ $exam->questions->flatMap->subQuestions->count() }};
+
     // إضافة سؤال جديد
     document.getElementById('add-question').addEventListener('click', function() {
         const questionsSection = document.getElementById('questions-section');
         const newQuestion = document.createElement('div');
         newQuestion.classList.add('question', 'mt-4');
         newQuestion.innerHTML = `
-            <button type="button" class="btn btn-danger btn-sm remove-question"><i class="fas fa-trash"></i> حذف السؤال</button>
+            <button type="button" class="btn btn-danger btn-sm remove-question btn-left"><i class="fas fa-trash"></i> حذف السؤال</button>
             <div class="form-group">
                 <label for="question_text"><i class="fas fa-pencil-alt"></i> نص السؤال:</label>
                 <input type="text" name="questions[${questionIndex}][text]" class="form-control" required>
@@ -297,18 +300,18 @@
                             <option value="1">صح</option>
                         </select>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
                 </div>
             </div>
 
             <!-- زر إضافة إجابة جديدة (لأسئلة غير النصية) -->
-            <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn" data-question-type="mcq"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+            <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn btn-left" data-question-type="mcq"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
 
             <!-- قسم إضافة الأسئلة الفرعية (للنص) -->
             <div class="passage-questions" data-question-type="passage" style="display: none;">
                 <h6><i class="fas fa-question"></i> الأسئلة الفرعية للنص</h6>
                 <div class="sub-question">
-                    <button type="button" class="btn btn-danger btn-sm remove-sub-question"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-sub-question btn-left"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
                     <div class="form-group">
                         <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
                         <input type="text" name="questions[${questionIndex}][sub_questions][0][text]" class="form-control">
@@ -343,16 +346,16 @@
                                     <option value="1">صح</option>
                                 </select>
                             </div>
-                            <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
                         </div>
                     </div>
                     <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
-                    <button type="button" class="btn btn-secondary btn-sm add-sub-answer"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+                    <button type="button" class="btn btn-secondary btn-sm add-sub-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
                 </div>
             </div>
 
             <!-- زر إضافة سؤال فرعي جديد (للنص) -->
-            <button type="button" class="btn btn-secondary btn-sm add-sub-question" style="display: none;"><i class="fas fa-plus"></i> إضافة سؤال فرعي</button>
+            <button type="button" class="btn btn-secondary btn-sm add-sub-question btn-left" style="display: none;"><i class="fas fa-plus"></i> إضافة سؤال فرعي</button>
         `;
         questionsSection.appendChild(newQuestion);
         questionIndex++;
@@ -361,27 +364,47 @@
     // إضافة إجابة جديدة (لأسئلة غير النصية)
     document.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('add-answer')) {
+            const questionDiv = e.target.closest('.question');
+            const questionType = questionDiv.querySelector('.question-type').value;
             const answersSection = e.target.previousElementSibling;
             const newAnswer = document.createElement('div');
             newAnswer.classList.add('answer', 'mt-3');
-            newAnswer.innerHTML = `
-                <div class="form-group">
-                    <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                    <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                    <input type="file" name="questions[${questionIndex - 1}][answers][${answerIndex}][image]" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                    <select name="questions[${questionIndex - 1}][answers][${answerIndex}][is_correct]" class="form-control" required>
-                        <option value="0">خطأ</option>
-                        <option value="1">صح</option>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
-            `;
+
+            if (questionType === 'ordering') {
+                // إضافة إجابة لسؤال الترتيب
+                newAnswer.innerHTML = `
+                    <div class="form-group">
+                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
+                        <input type="number" name="questions[${questionIndex - 1}][answers][${answerIndex}][order]" class="form-control" min="1" required>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                `;
+            } else {
+                // إضافة إجابة لأسئلة الاختيار من متعدد أو صح/خطأ
+                newAnswer.innerHTML = `
+                    <div class="form-group">
+                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
+                        <input type="file" name="questions[${questionIndex - 1}][answers][${answerIndex}][image]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
+                        <select name="questions[${questionIndex - 1}][answers][${answerIndex}][is_correct]" class="form-control" required>
+                            <option value="0">خطأ</option>
+                            <option value="1">صح</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                `;
+            }
+
             answersSection.appendChild(newAnswer);
             answerIndex++;
         }
@@ -409,7 +432,7 @@
                         <option value="1">صح</option>
                     </select>
                 </div>
-                <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
             `;
             answersSection.appendChild(newAnswer);
             answerIndex++;
@@ -423,7 +446,7 @@
             const newSubQuestion = document.createElement('div');
             newSubQuestion.classList.add('sub-question', 'mt-3');
             newSubQuestion.innerHTML = `
-                <button type="button" class="btn btn-danger btn-sm remove-sub-question"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
+                <button type="button" class="btn btn-danger btn-sm remove-sub-question btn-left"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
                 <div class="form-group">
                     <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
                     <input type="text" name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][text]" class="form-control">
@@ -458,11 +481,11 @@
                                 <option value="1">صح</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-danger btn-sm remove-answer"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
                     </div>
                 </div>
                 <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
-                <button type="button" class="btn btn-secondary btn-sm add-sub-answer"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+                <button type="button" class="btn btn-secondary btn-sm add-sub-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
             `;
             passageQuestionsSection.appendChild(newSubQuestion);
             subQuestionIndex++;
@@ -493,14 +516,56 @@
 
             if (e.target.value === 'passage') {
                 passageQuestionsSection.style.display = 'block';
-                answersSection.style.display = 'block'; // Show answers section for passage questions
-                addAnswerButton.style.display = 'inline-block'; // Show "Add Answer" button
+                answersSection.style.display = 'none'; // Hide answers section for passage questions
+                addAnswerButton.style.display = 'none'; // Hide "Add Answer" button
                 addSubQuestionButton.style.display = 'inline-block'; // Show "Add Sub-Question" button
+            } else if (e.target.value === 'ordering') {
+                passageQuestionsSection.style.display = 'none';
+                answersSection.style.display = 'block';
+                addAnswerButton.style.display = 'inline-block';
+                addSubQuestionButton.style.display = 'none';
+                // Update the answers section for ordering questions
+                answersSection.innerHTML = `
+                    <h6><i class="fas fa-list-ol"></i> إضافة الإجابات مع الترتيب</h6>
+                    <div class="answer">
+                        <div class="form-group">
+                            <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                            <input type="text" name="questions[${questionIndex - 1}][answers][0][text]" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
+                            <input type="number" name="questions[${questionIndex - 1}][answers][0][order]" class="form-control" min="1" required>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                    </div>
+                `;
             } else {
                 passageQuestionsSection.style.display = 'none';
                 answersSection.style.display = 'block';
                 addAnswerButton.style.display = 'inline-block';
                 addSubQuestionButton.style.display = 'none';
+                // Update the answers section for MCQ or True/False questions
+                answersSection.innerHTML = `
+                    <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
+                    <div class="answer">
+                        <div class="form-group">
+                            <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                            <input type="text" name="questions[${questionIndex - 1}][answers][0][text]" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
+                            <input type="file" name="questions[${questionIndex - 1}][answers][0][image]" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
+                            <select name="questions[${questionIndex - 1}][answers][0][is_correct]" class="form-control" required>
+                                <option value="0">خطأ</option>
+                                <option value="1">صح</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                    </div>
+                `;
             }
         }
     });
