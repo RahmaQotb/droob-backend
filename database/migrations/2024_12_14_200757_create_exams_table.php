@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->enum('type', ['normal', 'passage_based'])->default('normal'); // إضافة نوع الامتحان
             $table->timestamps();
         });
     }

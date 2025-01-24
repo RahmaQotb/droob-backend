@@ -55,6 +55,12 @@
                     <a href="{{route("exams.create")}}" class="submenu-link">اضافة امتحان</a>
                     
                 </li>
+
+                <li class="submenu-item  ">
+                    <a href="{{ route('exams.passage') }}" class="submenu-link">اضافة امتحان قطعة نصية</a>
+                    
+                </li>
+                
                 
             </ul>
             
