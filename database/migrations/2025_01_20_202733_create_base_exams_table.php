@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('base_exams', function (Blueprint $table) {
             $table->id();
-            $table->enum('name',['white','blue']);
+            $table->string('name',255);
             $table->timestamps();
         });
     }

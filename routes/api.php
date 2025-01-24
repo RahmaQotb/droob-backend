@@ -4,6 +4,7 @@
 <?php
 
 use App\Http\Controllers\Api\ExamController;
+use App\Http\Controllers\BaseExamController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,3 +50,10 @@ Route::get('/answers', [ExamController::class, 'getAnswers']); // عرض جمي�
 Route::get('/answers/{id}', [ExamController::class, 'getAnswer']);
 
 Route::post('/student',[StudentController::class,"store"]);
+
+
+Route::get('/base_exam',[BaseExamController::class,"GetBaseExam"]);
+
+Route::post('/base_exam',[BaseExamController::class,"BaseExamCorrection"]);
+
+Route::post('/base_exam',[BaseExamController::class,"ExamRedirection"]);

@@ -15,10 +15,28 @@ class BaseExamSeeder extends Seeder
     public function run(): void
     {
         BaseExam::create([
-            "name"=>"white"
+            "id"=>1,
+            "name"=>"الجانب النمائي"
         ]);
         BaseExam::create([
-            "name"=>"blue"
+            "id"=>2,
+            "name"=>"الجانب الأكاديمي"
+        ]);
+        BaseExam::create([
+            "id"=>3,
+            "name"=>"الجانب الجسدي"
+        ]);
+        BaseExam::create([
+            "id"=>4,
+            "name"=>"الجانب الانفعالي"
+        ]);
+        BaseExam::create([
+            "id"=>5,
+            "name"=>"الجانب الأسري"
+        ]);
+        BaseExam::create([
+            "id"=>6,
+            "name"=>"التفاعل الاجتماعي"
         ]);
     }
 }

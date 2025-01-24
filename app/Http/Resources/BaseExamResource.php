@@ -20,6 +20,7 @@ class BaseExamResource extends JsonResource
             "Exam"=>$this->BaseQuestions->map(function($questions){
                 return [
                     "question"=>$questions->question,
+                    "base_exam_id"=>$questions->base_exam_id,
                 ];
             })
         ];
