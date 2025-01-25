@@ -170,83 +170,114 @@
         </div>
     </div>
 </section>
-
-<!-- JavaScript لإضافة أسئلة وإجابات جديدة -->
 <script>
     let questionIndex = 1;
     let answerIndex = 1;
 
+    // دالة لتحديث حقول الإجابة بناءً على نوع السؤال
+    function updateAnswerFields(questionDiv) {
+        const questionType = questionDiv.querySelector('select[name$="[type]"]').value;
+        const answersSection = questionDiv.querySelector('.answers-section');
+
+        // مسح الحقول القديمة
+        answersSection.innerHTML = '';
+
+        if (questionType === 'ordering') {
+            // حقول الترتيب
+            answersSection.innerHTML = `
+                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات مع الترتيب</h6>
+                <div class="answer">
+                    <div class="form-group">
+                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                        <input type="text" name="questions[${questionIndex - 1}][answers][0][text]" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
+                        <input type="number" name="questions[${questionIndex - 1}][answers][0][order]" class="form-control" min="1" required>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                </div>
+            `;
+        } else {
+            // حقول الاختيار من متعدد أو صح/خطأ
+            answersSection.innerHTML = `
+                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
+                <div class="answer">
+                    <div class="form-group">
+                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                        <input type="text" name="questions[${questionIndex - 1}][answers][0][text]" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
+                        <input type="file" name="questions[${questionIndex - 1}][answers][0][image]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
+                        <select name="questions[${questionIndex - 1}][answers][0][is_correct]" class="form-control" required>
+                            <option value="0">خطأ</option>
+                            <option value="1">صح</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                </div>
+            `;
+        }
+    }
+
     // إضافة سؤال جديد
- // إضافة سؤال جديد
-document.getElementById('add-question').addEventListener('click', function() {
-    const questionsSection = document.getElementById('questions-section');
-    const newQuestion = document.createElement('div');
-    newQuestion.classList.add('question', 'mt-4');
-    newQuestion.innerHTML = `
-        <button type="button" class="btn btn-danger btn-sm remove-question btn-left"><i class="fas fa-trash"></i> حذف السؤال</button>
-        <div class="form-group">
-            <label for="question_text"><i class="fas fa-pencil-alt"></i> نص السؤال:</label>
-            <input type="text" name="questions[${questionIndex}][text]" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="question_type"><i class="fas fa-list"></i> نوع السؤال:</label>
-            <select name="questions[${questionIndex}][type]" class="form-control question-type" required>
-                <option value="mcq">اختيار من متعدد</option>
-                <option value="true_false">صح/خطأ</option>
-                <option value="ordering">ترتيب</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="question_image"><i class="fas fa-image"></i> صورة السؤال (اختياري):</label>
-            <input type="file" name="questions[${questionIndex}][image]" class="form-control">
-        </div>
-
-        <!-- قسم إضافة الإجابات (لأسئلة غير النصية) -->
-        <div class="answers-section" data-question-type="mcq">
-            <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
-            <div class="answer">
-                <div class="form-group">
-                    <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                    <input type="text" name="questions[${questionIndex}][answers][0][text]" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                    <input type="file" name="questions[${questionIndex}][answers][0][image]" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                    <select name="questions[${questionIndex}][answers][0][is_correct]" class="form-control" required>
-                        <option value="0">خطأ</option>
-                        <option value="1">صح</option>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+    document.getElementById('add-question').addEventListener('click', function() {
+        const questionsSection = document.getElementById('questions-section');
+        const newQuestion = document.createElement('div');
+        newQuestion.classList.add('question', 'mt-4');
+        newQuestion.innerHTML = `
+            <button type="button" class="btn btn-danger btn-sm remove-question btn-left"><i class="fas fa-trash"></i> حذف السؤال</button>
+            <div class="form-group">
+                <label for="question_text"><i class="fas fa-pencil-alt"></i> نص السؤال:</label>
+                <input type="text" name="questions[${questionIndex}][text]" class="form-control" required>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="question_type"><i class="fas fa-list"></i> نوع السؤال:</label>
+                <select name="questions[${questionIndex}][type]" class="form-control question-type" required>
+                    <option value="mcq">اختيار من متعدد</option>
+                    <option value="true_false">صح/خطأ</option>
+                    <option value="ordering">ترتيب</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="question_image"><i class="fas fa-image"></i> صورة السؤال (اختياري):</label>
+                <input type="file" name="questions[${questionIndex}][image]" class="form-control">
+            </div>
 
-        <!-- زر إضافة إجابة جديدة (لأسئلة غير النصية) -->
-        <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn btn-left" data-question-type="mcq"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
-    `;
-    questionsSection.appendChild(newQuestion);
-    questionIndex++;
-});
+            <!-- قسم إضافة الإجابات -->
+            <div class="answers-section">
+                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
+            </div>
 
-    
-    // إضافة إجابة جديدة (لأسئلة غير النصية)
+            <!-- زر إضافة إجابة جديدة -->
+            <div class="add-answer-container">
+                <button type="button" class="btn btn-secondary btn-sm add-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
+            </div>
+        `;
+        questionsSection.appendChild(newQuestion);
+        questionIndex++;
+    });
+
+    // إضافة إجابة جديدة
     document.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('add-answer')) {
             const questionDiv = e.target.closest('.question');
-            const questionType = questionDiv.querySelector('.question-type').value;
-            const answersSection = e.target.previousElementSibling;
+            const answersSection = questionDiv.querySelector('.answers-section');
+            const questionType = questionDiv.querySelector('select[name$="[type]"]').value;
+
             const newAnswer = document.createElement('div');
             newAnswer.classList.add('answer', 'mt-3');
 
             if (questionType === 'ordering') {
-                // إضافة إجابة لسؤال الترتيب
+                // حقول الترتيب
                 newAnswer.innerHTML = `
                     <div class="form-group">
                         <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
+                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
@@ -255,11 +286,11 @@ document.getElementById('add-question').addEventListener('click', function() {
                     <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
                 `;
             } else {
-                // إضافة إجابة لأسئلة الاختيار من متعدد أو صح/خطأ
+                // حقول الاختيار من متعدد أو صح/خطأ
                 newAnswer.innerHTML = `
                     <div class="form-group">
                         <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
+                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
@@ -291,63 +322,12 @@ document.getElementById('add-question').addEventListener('click', function() {
         }
     });
 
-    // تغيير نوع السؤال الأساسي
-    document.addEventListener('change', function (e) {
-        if (e.target && e.target.classList.contains('question-type')) {
+    // تحديث حقول الإجابة عند تغيير نوع السؤال
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.name.includes('[type]')) {
             const questionDiv = e.target.closest('.question');
-            const answersSection = questionDiv.querySelector('.answers-section');
-            const questionType = e.target.value;
-
-            updateQuestionAnswers(e.target); // تحديث الإجابات بناءً على نوع السؤال
+            updateAnswerFields(questionDiv);
         }
     });
-
-    // Function to update question answers based on the type
-    function updateQuestionAnswers(selectElement) {
-        const questionDiv = selectElement.closest('.question');
-        const answersSection = questionDiv.querySelector('.answers-section');
-        const questionType = selectElement.value;
-
-        if (questionType === 'ordering') {
-            // إظهار حقول الترتيب
-            answersSection.innerHTML = `
-                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات مع الترتيب</h6>
-                <div class="answer">
-                    <div class="form-group">
-                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex}][answers][0][text]" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
-                        <input type="number" name="questions[${questionIndex}][answers][0][order]" class="form-control" min="1" required>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                </div>
-            `;
-        } else {
-            // إظهار حقول الاختيار من متعدد
-            answersSection.innerHTML = `
-                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
-                <div class="answer">
-                    <div class="form-group">
-                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex}][answers][0][text]" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                        <input type="file" name="questions[${questionIndex}][answers][0][image]" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                        <select name="questions[${questionIndex}][answers][0][is_correct]" class="form-control" required>
-                            <option value="0">خطأ</option>
-                            <option value="1">صح</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                </div>
-            `;
-        }
-    }
 </script>
 @endsection

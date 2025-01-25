@@ -16,11 +16,13 @@ class AnswerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'question_id' => $this->question_id,
             'text' => $this->text,
             'image' => $this->image,
             'is_correct' => $this->is_correct,
             'order' => $this->order,
+            'question_id' => $this->question_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

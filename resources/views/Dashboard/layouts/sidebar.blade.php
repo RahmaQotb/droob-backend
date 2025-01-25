@@ -5,17 +5,26 @@
         <li
         class="sidebar-item  has-sub">
         <a href="#" class='sidebar-link'>
-            <i class="bi bi-pen-fill"></i>
+            <i class="bi bi-people-fill"></i>
             <span>الطلاب</span>
         </a>
     
-
+        <ul class="submenu ">
+                
+            <li class="submenu-item  ">
+                <a href="" class="submenu-link">كل الطلاب    </a>
+                
+            </li>
+                     
+        </ul>
+            
+            
     </li>
         
         <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-pen-fill"></i>
+                <i class="bi bi-journal-bookmark-fill"></i>
                 <span>المادة</span>
             </a>
             
@@ -38,7 +47,7 @@
         <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
-                <i class="iconly-boldProfile">
+                <i class="bi bi-file-earmark-medical-fill">
 
                 </i>
                 <span>الامتحانات</span>
@@ -66,62 +75,7 @@
             
 
         </li>
-       
-        <li
-            class="sidebar-item  has-sub">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-chat-dots-fill"></i>
-                <span>سؤال و جواب</span>
-            </a>
-            
-            <ul class="submenu ">
-                
-                <li class="submenu-item  ">
-                    <a href="component-accordion.html" class="submenu-link">كل الاسئلة</a>
-                    
-                </li>
-                
-                <li class="submenu-item  ">
-                    <a href="component-alert.html" class="submenu-link">اضافة سؤال</a>
-                    
-                </li>
-                
-            </ul>
-            
-
-        </li>
-        {{-- <li
-            class="sidebar-item  has-sub">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-cash"></i>
-                <span>العروض الترويجية</span>
-            </a>
-            
-            <ul class="submenu ">
-                
-                <li class="submenu-item  ">
-                    <a href="" class="submenu-link">كل العروض الترويجية</a>
-                    
-                </li>
-                
-                <li class="submenu-item  ">
-                    <a href="" class="submenu-link">اضافة عرض ترويجي</a>
-                    
-                </li>
-                
-            </ul>
-            
-
-        </li> --}}
-        
-        {{-- <li
-        class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
-            <i class="iconly-boldProfile"></i>
-            <span>الفريق</span>
-        </a> --}}
-        
-        <ul class="submenu ">
+        {{-- <ul class="submenu ">
             
             <li class="submenu-item  ">
                 <a href="component-accordion.html" class="submenu-link">كل الفريق</a>
@@ -134,13 +88,14 @@
             </li>
             
         </ul>
-        
+         --}}
 
+   
     </li>
         <li
             class="sidebar-item  ">
             <a href="index.html" class='sidebar-link'>
-                <i class="bi bi-grid-fill"></i>
+                <i class="bi bi-display-fill"></i>
                 <span>عرض الموقع</span>
             </a>
             
@@ -150,7 +105,7 @@
         <li
             class="sidebar-item  ">
             <a href="" class='sidebar-link'>
-                <i class="bi bi-person-badge-fill"></i>
+                <i class="bi bi-shield-lock-fill"></i>
                 <span>تغيير كلمة المرور</span>
             </a>
             
@@ -159,7 +114,7 @@
         <li
             class="sidebar-item  ">
             <a href="" class='sidebar-link'>
-                <i class="bi bi-person-badge-fill"></i>
+                <i class="bi bi-box-arrow-right"></i>
                 <span>تسجيل الخروج</span>
             </a>
             

@@ -16,12 +16,12 @@ class QuestionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'exam_id' => $this->exam_id,
-            'type' => $this->type,
             'text' => $this->text,
+            'type' => $this->type,
             'image' => $this->image,
-            'parent_question_id' => $this->parent_question_id,
-            'answers' => AnswerResource::collection($this->whenLoaded('answers')), // إذا كانت العلاقة محملة
+            'exam_id' => $this->exam_id,
+            'answers' => AnswerResource::collection($this->whenLoaded('answers')),
         ];
+
     }
 }
