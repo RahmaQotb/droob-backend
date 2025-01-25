@@ -40,7 +40,7 @@ class StudentController extends Controller
                 "data"=>$validator->errors()
             ],300);
         }
-        $student = Student::create($request->validated());
+        $student = Student::create($request->all());
         return response()->json([
             "message"=>"student created successfully",
             "data"=>$student
