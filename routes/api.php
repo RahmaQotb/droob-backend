@@ -56,4 +56,4 @@ Route::get('/base_exam',[BaseExamController::class,"GetBaseExam"]);
 
 Route::post('/base_exam',[BaseExamController::class,"BaseExamCorrection"]);
 
-Route::post('/base_exam',[BaseExamController::class,"ExamRedirection"]);
+Route::post('/base_exam/{examsArray}',[BaseExamController::class,"ExamRedirection"]);
