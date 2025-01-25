@@ -1,6 +1,3 @@
-
-
-
 <?php
 
 use App\Http\Controllers\Api\ExamController;
@@ -23,7 +20,6 @@ use App\Http\Controllers\Api\Auth\AuthController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-    
 });
 
 Route::post("/register",[AuthController::class,"register"]);
@@ -32,7 +28,7 @@ Route::post("/login",[AuthController::class,"login"]);
 Route::middleware("auth:sanctum")->group(function(){
     Route::post("/logout",[AuthController::class,"logout"]);
 });
-=========
+
 // Routes for Subjects (Read-only)
 Route::get('/subjects', [ExamController::class, 'getSubjects']); // عرض جميع المواد
 Route::get('/subjects/{id}', [ExamController::class, 'getSubject']); // عرض مادة معينة
@@ -48,4 +44,3 @@ Route::get('/questions/{id}', [ExamController::class, 'getQuestion']); // عرض
 // Routes for Answers (Read-only)
 Route::get('/answers', [ExamController::class, 'getAnswers']); // عرض جميع الإجابات
 Route::get('/answers/{id}', [ExamController::class, 'getAnswer']);
->>>>>>>>> Temporary merge branch 2
