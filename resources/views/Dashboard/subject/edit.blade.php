@@ -24,7 +24,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="name">الإسم</label>
-                        <input type="text" class="form-control" name="name" id="name" value="{{$subject->name}}" placeholder="">
+                        <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{$subject->name}}" placeholder="">
                     </div>
 
               
@@ -33,7 +33,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="description">الوصف</label>
-                        <input type="text" class="form-control" value="{{$subject->description}}" name="desc" id="desc" placeholder="">
+                        <input type="text" autocomplete="off" class="form-control" value="{{$subject->description}}" name="desc" id="desc" placeholder="">
                     </div>
                     
                     

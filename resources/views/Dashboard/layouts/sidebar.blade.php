@@ -3,8 +3,8 @@
         <li class="sidebar-title">القائمة</li>
         
         <li
-        class="sidebar-item  has-sub">
-        <a href="#" class='sidebar-link'>
+        class="sidebar-item  ">
+        <a href="{{route("students.index")}}" class='sidebar-link'>
             <i class="bi bi-pen-fill"></i>
             <span>الطلاب</span>
         </a>
@@ -61,7 +61,7 @@
 
         </li>
        
-        <li
+        {{-- <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-chat-dots-fill"></i>
@@ -83,7 +83,7 @@
             </ul>
             
 
-        </li>
+        </li> --}}
         {{-- <li
             class="sidebar-item  has-sub">
             <a href="#" class='sidebar-link'>
@@ -113,7 +113,7 @@
         <a href="#" class='sidebar-link'>
             <i class="iconly-boldProfile"></i>
             <span>الفريق</span>
-        </a> --}}
+        </a> 
         
         <ul class="submenu ">
             
@@ -129,7 +129,7 @@
             
         </ul>
         
-
+--}}
     </li>
         <li
             class="sidebar-item  ">
@@ -140,7 +140,7 @@
             
 
         </li>
-
+{{--
         <li
             class="sidebar-item  ">
             <a href="" class='sidebar-link'>
@@ -159,7 +159,7 @@
             
 
         </li>
-        
+        --}}
 </div>
 </div>
 </div>

@@ -13,7 +13,7 @@
 <section class="section">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">أضف ماده</h4>
+            <h4 class="card-title">أضف مادة</h4>
         </div>
         <form action="{{route('subjects.store')}}" method="post">
             @csrf
@@ -23,7 +23,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="name">الأسم</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="">
+                        <input type="text" autocomplete="off" class="form-control" name="name" id="name" placeholder="">
                     </div>
 
                     
@@ -31,7 +31,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="description">الوصف</label>
-                        <input type="text" class="form-control" name="desc" id="desc" placeholder="">
+                        <input type="text" autocomplete="off" class="form-control" name="desc" id="desc" placeholder="">
                     </div>
              
                     
