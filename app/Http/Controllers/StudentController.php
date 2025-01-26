@@ -31,7 +31,7 @@ class StudentController extends Controller
     public function store(Request $request) {
         $validator = Validator::make($request->all(),[
             "name"=>"required|string|max:255",
-            "gender"=>"required|in:male,female",
+            "gender"=>"required|in:0,1",
             "level"=>"required|string|in:4,5,6",
         ]);
         if($validator->fails()){
