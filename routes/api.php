@@ -52,8 +52,8 @@ Route::get('/answers/{id}', [ExamController::class, 'getAnswer']);
 Route::post('/student',[StudentController::class,"store"]);
 
 
-Route::get('/base_exam',[BaseExamController::class,"GetBaseExam"]);
+Route::get('/{id}/base_exam',[BaseExamController::class,"GetBaseExam"]);
 
-Route::post('/base_exam',[BaseExamController::class,"BaseExamCorrection"]);
+Route::post('/{id}/base_exam',[BaseExamController::class,"BaseExamCorrection"]);
 
 Route::post('/base_exam/{examsArray}',[BaseExamController::class,"ExamRedirection"]);
