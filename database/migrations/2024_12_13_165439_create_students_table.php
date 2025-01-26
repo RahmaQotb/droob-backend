@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("name",255);
             $table->string("level");
-            $table->enum("gender",["male","female"]);
+            $table->enum("gender",[0,1]);
             $table->enum("intelligence_level_status",["success","failed"])->default('failed');
             $table->timestamps();
         });
