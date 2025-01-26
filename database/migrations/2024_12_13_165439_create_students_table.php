@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string("name",255);
-            $table->enum("level",[4,5,6]);
+            $table->string("level");
             $table->enum("gender",["male","female"]);
             $table->enum("intelligence_level_status",["success","failed"])->default('failed');
             $table->timestamps();
