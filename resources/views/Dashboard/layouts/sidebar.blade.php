@@ -12,7 +12,7 @@
         <ul class="submenu ">
                 
             <li class="submenu-item  ">
-                <a href="" class="submenu-link">كل الطلاب    </a>
+                <a href="{{route("students.index")}}" class="submenu-link">كل الطلاب    </a>
                 
             </li>
                      
