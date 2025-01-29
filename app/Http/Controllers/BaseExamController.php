@@ -68,21 +68,28 @@ class BaseExamController extends Controller
         $student = Student::where("id",$id)->first();
         if(!$student) return response()->json(["success"=>false,"message"=>"student not exist","data"=>null],404);
         // check if the array of faults is empty
+        $examsArray = json_decode($examsArray, true);
+
+        // Check if decoding was successful
+        if (!is_array($examsArray)) {
+            return response()->json(['error' => 'Invalid examsArray parameter'], 400);
+        }
         if(!$examsArray) return response()->json(["success"=>false,"message"=>"student does't have to take exams","data"=> null],300);
         
         // remove duplicates and implement flags to make a decision back to them
-        $exams = array_unique($examsArray);
+        $exams = array_values(array_unique($examsArray));
+        // dd($exams);
             $arabicOnly=0;
             $mathOnly=0;
             $arabic_math=0;
                 for($i = 0 ; $i < count($exams) ; $i++ )
                 {
                         if($exams[$i]==1){
-                            $arabicOnly = $arabicOnly +1 ;
+                            $arabicOnly++ ;
                         }
                         if($exams[$i]==2){
                             if($exams[$i]==2){
-                                $mathOnly = $mathOnly +1 ;
+                                $mathOnly++;
                             }
                         }
                         if($exams[$i]>1){
@@ -91,7 +98,7 @@ class BaseExamController extends Controller
                 }
 
         // check if there is faults in general topics , or both of arabic and math questions to => to retrive all exams  
-        if($arabic_math >0 || ($arabicOnly =1 && $mathOnly=1))
+        if(($arabicOnly == 1 && $mathOnly == 1) || $arabic_math > 0)
         {
             $exam = Exam::with(['subject', 'questions.answers'])->get();
             
@@ -113,9 +120,9 @@ class BaseExamController extends Controller
         }
 
         // if the faults in only math questions
-        if($mathOnly=1){
+        if($mathOnly==1){
             $subject = Subject::where('name','Math')->first();
-            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id',$subject->id)->get();
+            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id',$subject->id)->first();
             if(!$exam)
             {
                 return response()->json([
@@ -134,9 +141,9 @@ class BaseExamController extends Controller
 
 
         // if the faults in only arabic questions
-        if($arabicOnly=1){
+        if($arabicOnly==1){
             $subject = Subject::where('name','Arabic')->first();
-            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id',$subject->id)->get();
+            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id',$subject->id)->first();
             if(!$exam)
             {
                 return response()->json([

@@ -15,7 +15,7 @@ class StudentSeeder extends Seeder
         DB::table('students')->insert([
             [
                 'name' => 'Ahmed Ali',
-                'level' => '4', // يجب أن تكون مطابقة تمامًا للتعريف في الجدول
+                'level' => '4', 
                 'intelligence_level_status' => 'success',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -30,7 +30,7 @@ class StudentSeeder extends Seeder
             [
                 'name' => 'Mohamed Salah',
                 'level' =>'6',
-                'intelligence_level_status' => null,
+                'intelligence_level_status' => 'failed',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -16,10 +16,13 @@ class ExamResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'subject_id' => $this->subject_id,
             'name' => $this->name,
-            'description' => $this->description,
-            'questions' => QuestionResource::collection($this->whenLoaded('questions')), // إذا كانت العلاقة محملة
+            'subject' => [
+                "id"=>$this->subject->id,
+                "name"=>$this->subject->name,
+            ],
+            'type' => $this->type,
+            'questions' => QuestionResource::collection($this->whenLoaded('questions')),
         ];
     }
 }

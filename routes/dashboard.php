@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\ExamController;
-use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,11 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix("/dashboard")->group(function () {
     Route::resource("exams",ExamController::class);
-    Route::get("categories", function () {
-        return view("Dashboard.Categories.index");
-    });
-
+    // Route::get('/exams/passage', [ExamController::class, 'createPassage  '])->name('exams.passage');
+    Route::resource("students" , StudentController::class);
     Route::resource("subjects" , SubjectController::class);
-    Route::resource('students' , StudentController::class);
-});
 
+});
+Route::get('/exams/passage', [ExamController::class, 'createPassage'])->name('exams.passage');

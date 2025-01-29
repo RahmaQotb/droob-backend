@@ -65,10 +65,9 @@
             float: right;
             margin-top: -10px;
         }
-        .passage-questions {
-            margin-left: 20px;
-            border-left: 2px solid #4a90e2;
-            padding-left: 20px;
+        .btn-left {
+            float: left;
+            margin-right: 10px;
         }
         .btn-left {
             float: left;
@@ -131,7 +130,6 @@
                                 <option value="mcq">اختيار من متعدد</option>
                                 <option value="true_false">صح/خطأ</option>
                                 <option value="ordering">ترتيب</option>
-                                <option value="passage">نص (Passage)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -164,49 +162,6 @@
 
                         <!-- زر إضافة إجابة جديدة (لأسئلة غير النصية) -->
                         <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn btn-left" data-question-type="mcq"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
-
-                        <!-- قسم إضافة الأسئلة الفرعية (للنص) -->
-                        <div class="passage-questions" data-question-type="passage" style="display: none;">
-                            <h6><i class="fas fa-question"></i> الأسئلة الفرعية للنص</h6>
-                            <div class="sub-question">
-                                <button type="button" class="btn btn-danger btn-sm remove-sub-question btn-left"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
-                                <div class="form-group">
-                                    <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
-                                    <input type="text" name="questions[0][sub_questions][0][text]" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="sub_question_image"><i class="fas fa-image"></i> صورة السؤال الفرعي (اختياري):</label>
-                                    <input type="file" name="questions[0][sub_questions][0][image]" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="sub_question_type"><i class="fas fa-list"></i> نوع السؤال الفرعي:</label>
-                                    <select name="questions[0][sub_questions][0][type]" class="form-control" required>
-                                        <option value="mcq">اختيار من متعدد</option>
-                                        <option value="true_false">صح/خطأ</option>
-                                        <option value="ordering">ترتيب</option>
-                                    </select>
-                                </div>
-                                <div class="answers-section">
-                                    <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
-                                    <div class="answer">
-                                        <div class="form-group">
-                                            <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                                            <input type="text" name="questions[0][sub_questions][0][answers][0][text]" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
-                                            <input type="number" name="questions[0][sub_questions][0][answers][0][order]" class="form-control" min="1" required>
-                                        </div>
-                                        <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                                    </div>
-                                </div>
-                                <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
-                                <button type="button" class="btn btn-secondary btn-sm add-sub-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
-                            </div>
-                        </div>
-
-                        <!-- زر إضافة سؤال فرعي جديد (للنص) -->
-                        <button type="button" class="btn btn-secondary btn-sm add-sub-question btn-left" style="display: none;"><i class="fas fa-plus"></i> إضافة سؤال فرعي</button>
                     </div>
                 </div>
 
@@ -219,12 +174,59 @@
         </div>
     </div>
 </section>
-
-<!-- JavaScript لإضافة أسئلة وإجابات جديدة -->
 <script>
     let questionIndex = 1;
     let answerIndex = 1;
-    let subQuestionIndex = 1;
+
+    // دالة لتحديث حقول الإجابة بناءً على نوع السؤال
+    function updateAnswerFields(questionDiv) {
+        const questionType = questionDiv.querySelector('select[name$="[type]"]').value;
+        const answersSection = questionDiv.querySelector('.answers-section');
+
+        // مسح الحقول القديمة
+        answersSection.innerHTML = '';
+
+        if (questionType === 'ordering') {
+            // حقول الترتيب
+            answersSection.innerHTML = `
+                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات مع الترتيب</h6>
+                <div class="answer">
+                    <div class="form-group">
+                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                        <input type="text" name="questions[${questionIndex - 1}][answers][0][text]" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
+                        <input type="number" name="questions[${questionIndex - 1}][answers][0][order]" class="form-control" min="1" required>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                </div>
+            `;
+        } else {
+            // حقول الاختيار من متعدد أو صح/خطأ
+            answersSection.innerHTML = `
+                <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
+                <div class="answer">
+                    <div class="form-group">
+                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
+                        <input type="text" name="questions[${questionIndex - 1}][answers][0][text]" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
+                        <input type="file" name="questions[${questionIndex - 1}][answers][0][image]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
+                        <select name="questions[${questionIndex - 1}][answers][0][is_correct]" class="form-control" required>
+                            <option value="0">خطأ</option>
+                            <option value="1">صح</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
+                </div>
+            `;
+        }
+    }
 
     // إضافة سؤال جديد
     document.getElementById('add-question').addEventListener('click', function() {
@@ -243,7 +245,6 @@
                     <option value="mcq">اختيار من متعدد</option>
                     <option value="true_false">صح/خطأ</option>
                     <option value="ordering">ترتيب</option>
-                    <option value="passage">نص (Passage)</option>
                 </select>
             </div>
             <div class="form-group">
@@ -251,94 +252,36 @@
                 <input type="file" name="questions[${questionIndex}][image]" class="form-control">
             </div>
 
-            <!-- قسم إضافة الإجابات (لأسئلة غير النصية) -->
-            <div class="answers-section" data-question-type="mcq">
+            <!-- قسم إضافة الإجابات -->
+            <div class="answers-section">
                 <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
-                <div class="answer">
-                    <div class="form-group">
-                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex}][answers][0][text]" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                        <input type="file" name="questions[${questionIndex}][answers][0][image]" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                        <select name="questions[${questionIndex}][answers][0][is_correct]" class="form-control" required>
-                            <option value="0">خطأ</option>
-                            <option value="1">صح</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                </div>
             </div>
 
-            <!-- زر إضافة إجابة جديدة (لأسئلة غير النصية) -->
-            <button type="button" class="btn btn-secondary btn-sm add-answer add-answer-btn btn-left" data-question-type="mcq"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
-
-            <!-- قسم إضافة الأسئلة الفرعية (للنص) -->
-            <div class="passage-questions" data-question-type="passage" style="display: none;">
-                <h6><i class="fas fa-question"></i> الأسئلة الفرعية للنص</h6>
-                <div class="sub-question">
-                    <button type="button" class="btn btn-danger btn-sm remove-sub-question btn-left"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
-                    <div class="form-group">
-                        <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
-                        <input type="text" name="questions[${questionIndex}][sub_questions][0][text]" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="sub_question_image"><i class="fas fa-image"></i> صورة السؤال الفرعي (اختياري):</label>
-                        <input type="file" name="questions[${questionIndex}][sub_questions][0][image]" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="sub_question_type"><i class="fas fa-list"></i> نوع السؤال الفرعي:</label>
-                        <select name="questions[${questionIndex}][sub_questions][0][type]" class="form-control" required>
-                            <option value="mcq">اختيار من متعدد</option>
-                            <option value="true_false">صح/خطأ</option>
-                            <option value="ordering">ترتيب</option>
-                        </select>
-                    </div>
-                    <div class="answers-section">
-                        <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
-                        <div class="answer">
-                            <div class="form-group">
-                                <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                                <input type="text" name="questions[${questionIndex}][sub_questions][0][answers][0][text]" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
-                                <input type="number" name="questions[${questionIndex}][sub_questions][0][answers][0][order]" class="form-control" min="1" required>
-                            </div>
-                            <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                        </div>
-                    </div>
-                    <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
-                    <button type="button" class="btn btn-secondary btn-sm add-sub-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
-                </div>
+            <!-- زر إضافة إجابة جديدة -->
+            <div class="add-answer-container">
+                <button type="button" class="btn btn-secondary btn-sm add-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
             </div>
-
-            <!-- زر إضافة سؤال فرعي جديد (للنص) -->
-            <button type="button" class="btn btn-secondary btn-sm add-sub-question btn-left" style="display: none;"><i class="fas fa-plus"></i> إضافة سؤال فرعي</button>
         `;
         questionsSection.appendChild(newQuestion);
         questionIndex++;
     });
 
-    // إضافة إجابة جديدة (لأسئلة غير النصية)
+    // إضافة إجابة جديدة
     document.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('add-answer')) {
             const questionDiv = e.target.closest('.question');
-            const questionType = questionDiv.querySelector('.question-type').value;
-            const answersSection = e.target.previousElementSibling;
+            const answersSection = questionDiv.querySelector('.answers-section');
+            const questionType = questionDiv.querySelector('select[name$="[type]"]').value;
+
             const newAnswer = document.createElement('div');
             newAnswer.classList.add('answer', 'mt-3');
 
             if (questionType === 'ordering') {
-                // إضافة إجابة لسؤال الترتيب
+                // حقول الترتيب
                 newAnswer.innerHTML = `
                     <div class="form-group">
                         <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
+                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
@@ -347,11 +290,11 @@
                     <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
                 `;
             } else {
-                // إضافة إجابة لأسئلة الاختيار من متعدد أو صح/خطأ
+                // حقول الاختيار من متعدد أو صح/خطأ
                 newAnswer.innerHTML = `
                     <div class="form-group">
                         <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control">
+                        <input type="text" name="questions[${questionIndex - 1}][answers][${answerIndex}][text]" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
@@ -373,108 +316,6 @@
         }
     });
 
-    // إضافة إجابة جديدة (للأسئلة الفرعية)
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('add-sub-answer')) {
-            const subQuestionDiv = e.target.closest('.sub-question');
-            const questionType = subQuestionDiv.querySelector('select[name*="type"]').value;
-            const answersSection = e.target.previousElementSibling;
-            const newAnswer = document.createElement('div');
-            newAnswer.classList.add('answer', 'mt-3');
-
-            if (questionType === 'ordering') {
-                // إضافة إجابة لسؤال الترتيب
-                newAnswer.innerHTML = `
-                    <div class="form-group">
-                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex}][sub_questions][${subQuestionIndex}][answers][${answerIndex}][text]" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="answer_order"><i class="fas fa-sort-numeric-down"></i> الترتيب الصحيح:</label>
-                        <input type="number" name="questions[${questionIndex}][sub_questions][${subQuestionIndex}][answers][${answerIndex}][order]" class="form-control" min="1" required>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                `;
-            } else {
-                // إضافة إجابة لأسئلة الاختيار من متعدد أو صح/خطأ
-                newAnswer.innerHTML = `
-                    <div class="form-group">
-                        <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                        <input type="text" name="questions[${questionIndex}][sub_questions][${subQuestionIndex}][answers][${answerIndex}][text]" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                        <input type="file" name="questions[${questionIndex}][sub_questions][${subQuestionIndex}][answers][${answerIndex}][image]" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                        <select name="questions[${questionIndex}][sub_questions][${subQuestionIndex}][answers][${answerIndex}][is_correct]" class="form-control" required>
-                            <option value="0">خطأ</option>
-                            <option value="1">صح</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                `;
-            }
-
-            answersSection.appendChild(newAnswer);
-            answerIndex++;
-        }
-    });
-
-    // إضافة سؤال فرعي جديد
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('add-sub-question')) {
-            const passageQuestionsSection = e.target.closest('.question').querySelector('.passage-questions');
-            const newSubQuestion = document.createElement('div');
-            newSubQuestion.classList.add('sub-question', 'mt-3');
-            newSubQuestion.innerHTML = `
-                <button type="button" class="btn btn-danger btn-sm remove-sub-question btn-left"><i class="fas fa-trash"></i> حذف السؤال الفرعي</button>
-                <div class="form-group">
-                    <label for="sub_question_text"><i class="fas fa-pencil-alt"></i> نص السؤال الفرعي:</label>
-                    <input type="text" name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][text]" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="sub_question_image"><i class="fas fa-image"></i> صورة السؤال الفرعي (اختياري):</label>
-                    <input type="file" name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][image]" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="sub_question_type"><i class="fas fa-list"></i> نوع السؤال الفرعي:</label>
-                    <select name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][type]" class="form-control" required>
-                        <option value="mcq">اختيار من متعدد</option>
-                        <option value="true_false">صح/خطأ</option>
-                        <option value="ordering">ترتيب</option>
-                    </select>
-                </div>
-                <div class="answers-section">
-                    <h6><i class="fas fa-list-ol"></i> إضافة الإجابات</h6>
-                    <div class="answer">
-                        <div class="form-group">
-                            <label for="answer_text"><i class="fas fa-pencil-alt"></i> نص الإجابة:</label>
-                            <input type="text" name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][answers][0][text]" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="answer_image"><i class="fas fa-image"></i> صورة الإجابة (اختياري):</label>
-                            <input type="file" name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][answers][0][image]" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="is_correct"><i class="fas fa-check-circle"></i> هل الإجابة صحيحة؟</label>
-                            <select name="questions[${questionIndex - 1}][sub_questions][${subQuestionIndex}][answers][0][is_correct]" class="form-control" required>
-                                <option value="0">خطأ</option>
-                                <option value="1">صح</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-danger btn-sm remove-answer btn-left"><i class="fas fa-trash"></i> حذف الإجابة</button>
-                    </div>
-                </div>
-                <!-- زر إضافة إجابة جديدة (للأسئلة الفرعية) -->
-                <button type="button" class="btn btn-secondary btn-sm add-sub-answer btn-left"><i class="fas fa-plus"></i> إضافة إجابة جديدة</button>
-            `;
-            passageQuestionsSection.appendChild(newSubQuestion);
-            subQuestionIndex++;
-        }
-    });
-
     // حذف سؤال أو إجابة
     document.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('remove-question')) {
@@ -483,41 +324,13 @@
         if (e.target && e.target.classList.contains('remove-answer')) {
             e.target.closest('.answer').remove();
         }
-        if (e.target && e.target.classList.contains('remove-sub-question')) {
-            e.target.closest('.sub-question').remove();
-        }
     });
 
-    // تغيير نوع السؤال الأساسي
-    document.addEventListener('change', function (e) {
-        if (e.target && e.target.classList.contains('question-type')) {
+    // تحديث حقول الإجابة عند تغيير نوع السؤال
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.name.includes('[type]')) {
             const questionDiv = e.target.closest('.question');
-            const passageQuestionsSection = questionDiv.querySelector('.passage-questions');
-            const answersSection = questionDiv.querySelector('.answers-section');
-            const addAnswerButton = questionDiv.querySelector('.add-answer');
-            const addSubQuestionButton = questionDiv.querySelector('.add-sub-question');
-
-            if (e.target.value === 'passage') {
-                // إظهار قسم الأسئلة الفرعية وإخفاء قسم الإجابات
-                passageQuestionsSection.style.display = 'block';
-                answersSection.style.display = 'none';
-                addAnswerButton.style.display = 'none';
-                addSubQuestionButton.style.display = 'inline-block';
-
-                // تحديث الأسئلة الفرعية لتكون اختيار من متعدد بشكل افتراضي
-                const subQuestionType = passageQuestionsSection.querySelector('.sub-question select[name*="type"]');
-                subQuestionType.value = 'mcq'; // Set default to MCQ
-                updateSubQuestionAnswers(subQuestionType); // Update answers based on the type
-            } else {
-                // إخفاء قسم الأسئلة الفرعية وإظهار قسم الإجابات
-                passageQuestionsSection.style.display = 'none';
-                answersSection.style.display = 'block';
-                addAnswerButton.style.display = 'inline-block';
-                addSubQuestionButton.style.display = 'none';
-
-                // تحديث الإجابات بناءً على نوع السؤال الأساسي
-                updateQuestionAnswers(e.target);
-            }
+            updateAnswerFields(questionDiv);
         }
     });
 

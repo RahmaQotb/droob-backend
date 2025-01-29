@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $guarded =[];
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'grades', 'student_id', 'exam_id')
+                    ->withPivot('degree')
+                    ->withTimestamps();
+    }
+    
 
-   
 }

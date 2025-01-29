@@ -1,6 +1,4 @@
 
-
-
 <?php
 
 use App\Http\Controllers\Api\ExamController;
@@ -51,9 +49,10 @@ Route::get('/answers/{id}', [ExamController::class, 'getAnswer']);
 
 Route::post('/student',[StudentController::class,"store"]);
 
+Route::post('/exam/{examId}/correct/{Id}', [ExamController::class, 'ExamCorrection']);
 
 Route::get('/{id}/base_exam',[BaseExamController::class,"GetBaseExam"]);
 
 Route::post('/{id}/base_exam',[BaseExamController::class,"BaseExamCorrection"]);
 
-Route::post('/{id}/base_exam/{examsArray}',[BaseExamController::class,"ExamRedirection"]);
+Route::get('/{id}/base_exam/{examsArray}',[BaseExamController::class,"ExamRedirection"]);

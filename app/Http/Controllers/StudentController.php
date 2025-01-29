@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -50,13 +50,13 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(string $id)
-    // {
-    //     $student = Student::findOrFail($id);
-
-    //     $grades = $student->grades;
-    //     return view('Dashboard.student.show', compact('student', 'grades'));
-    // }
+    public function show(Student $student)
+    {
+        $student->load('exams'); 
+    
+        return view('Dashboard.student.show', compact('student'));
+    }
+    
 
     /**
      * Show the form for editing the specified resource.
