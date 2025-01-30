@@ -35,13 +35,11 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        // تحديد القواعد بناءً على نوع الامتحان
         $rules = [
             'name' => 'required|string|max:255',
             'subject_id' => 'required|exists:subjects,id',
         ];
     
-        // إذا كان النموذج يحتوي على بيانات للقطعة النصية
         if ($request->has('type') && $request->type === 'passage_based') {
             $rules = array_merge($rules, [
                 'type' => 'required|in:normal,passage_based',
@@ -187,7 +185,6 @@ class ExamController extends Controller
                 'passage_questions.*.answers.*.order' => 'required_if:passage_questions.*.type,ordering|integer|min:1',
             ]);
         } else {
-            // إذا كان النموذج للامتحان العادي
             $rules = array_merge($rules, [
                 'questions' => 'required|array',
                 'questions.*.text' => 'required|string',
