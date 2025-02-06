@@ -62,109 +62,113 @@ class BaseExamController extends Controller
         
     }
 
-    public function ExamRedirection($id , $examsArray){
-        
-        // check if student added
-        $student = Student::where("id",$id)->first();
-        if(!$student) return response()->json(["success"=>false,"message"=>"student not exist","data"=>null],404);
-        // check if the array of faults is empty
-        $examsArray = json_decode($examsArray, true);
-
-        // Check if decoding was successful
-        if (!is_array($examsArray)) {
-            return response()->json(['error' => 'Invalid examsArray parameter'], 400);
-        }
-        if(!$examsArray) return response()->json(["success"=>false,"message"=>"student does't have to take exams","data"=> null],300);
-        
-        // remove duplicates and implement flags to make a decision back to them
-        $exams = array_values(array_unique($examsArray));
-        // dd($exams);
-            $arabicOnly=0;
-            $mathOnly=0;
-            $arabic_math=0;
-                for($i = 0 ; $i < count($exams) ; $i++ )
-                {
-                        if($exams[$i]==1){
-                            $arabicOnly++ ;
-                        }
-                        if ($exams[$i] == 2) {
-                            $mathOnly++;
-                        }
-                        
-                        
-                        if (in_array($exams[$i], [1, 2])) {
-                            $arabic_math = 1;
-                        }
-                        
-                }
-
-        // check if there is faults in general topics , or both of arabic and math questions to => to retrive all exams  
-        if(($arabicOnly == 1 && $mathOnly == 1) || $arabic_math > 0)
-        {
-            $exam = Exam::with(['subject', 'questions.answers'])->get();
-            if ($exam->isEmpty()) {  
-
-                    return response()->json([
-                        'success'=>false,
-                        'message'=>"can't retrive exam",
-                        'exam'=> null
-                    ],404);
-                }
-
+    public function ExamRedirection($id, $examsArray)
+    {
+        // Check if student exists
+        $student = Student::where("id", $id)->first();
+        if (!$student) {
             return response()->json([
-                'success'=>true,
-                'message'=>'arabic and math exam retrived successfully',
-                'exam'=> ExamResource::collection($exam)
-            ],200);
-
+                "success" => false,
+                "message" => "Student does not exist",
+                "data" => null
+            ], 404);
         }
-
-        // if the faults in only math questions
-        if($mathOnly==1){
-            $subject = Subject::where('name','Math')->first();
-            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id',$subject->id)->first();
-            if(!$exam)
-            {
-                return response()->json([
-                    "success"=>false,
-                    "message"=>"exam not found",
-                ],status: 404);
-            }
-
-            return response()->json([
-                "success"=>true,
-                "message"=>"math exam retrived successfully",
-                "data"=> new ExamResource($exam),
-            ],200);
-
-        }
-
-
-        // if the faults in only arabic questions
-        if($arabicOnly==1){
-            $subject = Subject::where('name','Arabic')->first();
-            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id',$subject->id)->first();
-            if(!$exam)
-            {
-                return response()->json([
-                    "success"=>false,
-                    "message"=>"exam not found",
-                ],status: 404);
-            }
-
-            return response()->json([
-                "success"=>true,
-                "message"=>"arabic exam retrived successfully",
-                "data"=> new ExamResource($exam),
-            ],200);
-            
-        }
-        // return response()->json([
-        //     "success"=>true,
-        //     "message"=>"student does't have to take exams",
-        //     "data"=> null,
-        // ],200);
-        
-    }
     
+        // Decode the exams array
+        $examsArray = json_decode($examsArray, true);
+    
+        // Check if decoding was successful and if the array is not empty
+        if (!is_array($examsArray)) {
+            return response()->json([
+                "success" => false,
+                "message" => "Invalid examsArray parameter",
+                "data" => null
+            ], 400);
+        }
+        if (empty($examsArray)) {
+            return response()->json([
+                "success" => false,
+                "message" => "Student doesn't have to take exams",
+                "data" => null
+            ], 300);
+        }
+    
+        // Remove duplicates
+        $exams = array_values(array_unique($examsArray));
+    
+        // Initialize flags
+        $hasArabic = in_array(1, $exams); // Check if Arabic fault exists
+        $hasMath = in_array(2, $exams);   // Check if Math fault exists
+    
+        // Retrieve exams based on faults
+        if ($hasArabic && $hasMath) {
+            // Retrieve all exams if faults exist in both Arabic and Math
+            $exam = Exam::with(['subject', 'questions.answers'])->get();
+            if ($exam->isEmpty()) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Can't retrieve exams",
+                    "exam" => null
+                ], 404);
+            }
+            return response()->json([
+                "success" => true,
+                "message" => "Arabic and Math exams retrieved successfully",
+                "exam" => ExamResource::collection($exam)
+            ], 200);
+        } elseif ($hasMath) {
+            // Retrieve Math exam if faults exist only in Math
+            $subject = Subject::where('name', 'Math')->first();
+            if (!$subject) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Math subject not found",
+                    "data" => null
+                ], 404);
+            }
+            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id', $subject->id)->first();
+            if (!$exam) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Math exam not found",
+                    "data" => null
+                ], 404);
+            }
+            return response()->json([
+                "success" => true,
+                "message" => "Math exam retrieved successfully",
+                "data" => new ExamResource($exam)
+            ], 200);
+        } elseif ($hasArabic) {
+            // Retrieve Arabic exam if faults exist only in Arabic
+            $subject = Subject::where('name', 'Arabic')->first();
+            if (!$subject) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Arabic subject not found",
+                    "data" => null
+                ], 404);
+            }
+            $exam = Exam::with(['subject', 'questions.answers'])->where('subject_id', $subject->id)->first();
+            if (!$exam) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Arabic exam not found",
+                    "data" => null
+                ], 404);
+            }
+            return response()->json([
+                "success" => true,
+                "message" => "Arabic exam retrieved successfully",
+                "data" => new ExamResource($exam)
+            ], 200);
+        } else {
+            // No relevant faults found
+            return response()->json([
+                "success" => false,
+                "message" => "Student doesn't have to take exams",
+                "data" => null
+            ], 300);
+        }
+    }
 }
