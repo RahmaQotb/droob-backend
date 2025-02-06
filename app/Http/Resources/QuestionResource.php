@@ -18,7 +18,7 @@ class QuestionResource extends JsonResource
             'id' => $this->id,
             'text' => $this->text,
             'type' => $this->type,
-            'image' => asset('storage/' .$this->image),
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
             'exam_id' => $this->exam_id,
             'answers' => AnswerResource::collection($this->whenLoaded('answers')),
         ];
