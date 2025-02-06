@@ -30,7 +30,7 @@ class Exam extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class, 'grades', 'exam_id', 'student_id')
-                    ->withPivot('degree')
+                    ->withPivot('degree', 'difficulty')
                     ->withTimestamps();
     }
     

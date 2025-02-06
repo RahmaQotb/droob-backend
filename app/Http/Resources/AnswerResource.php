@@ -17,7 +17,7 @@ class AnswerResource extends JsonResource
         return [
             'id' => $this->id,
             'text' => $this->text,
-            'image' => $this->image,
+            'image' => asset('storage/' .$this->image),
             'is_correct' => $this->is_correct,
             'order' => $this->order,
             'question_id' => $this->question_id,

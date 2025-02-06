@@ -129,16 +129,30 @@ class ExamController extends Controller
     
         $totalScore = min(100, max(0, $totalScore));
     
+        if ($totalScore > 40 && $totalScore < 70) {
+            // صعوبة متوسطة
+            $difficulty = 'صعوبة متوسطة';
+        } elseif ($totalScore <= 40) {
+            // صعوبة شديدة
+            $difficulty = 'صعوبة شديدة';
+        } elseif ($totalScore >= 70 && $totalScore <= 100) {
+            // صعوبة منخفضة
+            $difficulty = 'صعوبة منخفضة';
+        } else {
+            // إذا كانت الدرجة خارج النطاق المتوقع
+            $difficulty = 'درجة غير صالحة';
+        }            
+    
         Grade::create([
             'exam_id' => $exam->id,
             'student_id' => $student->id,
             'degree' => $totalScore,
+            'difficulty' => $difficulty,
         ]);
-    
-        return response()->json([
-            "message" => "Exam correction done",
-            'total_score' => $totalScore,
-        ], 200);
-    }
-    }
-   
+    return response()->json([
+        "message" => "Exam correction done",
+        'درجة الطالب' => $totalScore,
+        "مستوى الصعوبة: " => $difficulty
+    ], 200);
+}
+}

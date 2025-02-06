@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id'); 
             $table->decimal('degree', 5, 2); 
             $table->timestamps();
-    
+            $table->string('difficulty');
             $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });

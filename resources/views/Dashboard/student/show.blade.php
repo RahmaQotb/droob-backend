@@ -29,7 +29,7 @@
                 <h5>معلومات الطالب</h5>
                 <p><strong>اسم الطالب:</strong> {{ $student->name }}</p>
                 <p><strong>رقم الطالب:</strong> {{ $student->id }}</p>
-                <p><strong>تاريخ الإنشاء:</strong> {{ $student->created_at->format('Y-m-d H:i:s') }}</p>
+                <p><strong>تاريخ الإنشاء:</strong> {{ $student->created_at->format('Y-m-d') }}</p>
             </div>
 
             <!-- Exams and Grades -->
@@ -42,6 +42,7 @@
                                 <th>اسم الامتحان</th>
                                 <th>المادة الدراسية</th>
                                 <th>الدرجة</th>
+                                <th>مستوى الصعوبة</th>
                                 <th>تاريخ الامتحان</th>
                             </tr>
                         </thead>
@@ -51,6 +52,7 @@
                                     <td>{{ $exam->name }}</td>
                                     <td>{{ $exam->subject->name }}</td>
                                     <td>{{ $exam->pivot->degree?? 'غير محدد' }}</td> <!-- Access grade from the pivot table -->
+                                    <td>{{ $exam->pivot->difficulty?? 'غير محدد' }}</td> <!-- Access grade from the pivot table -->
                                     <td>{{ $exam->created_at->format('Y-m-d') }}</td>
                                 </tr>
                             @endforeach

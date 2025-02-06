@@ -56,11 +56,11 @@
                     عرض التفاصيل
                 </a>
             </td>
-            <td>
+            {{-- <td>
                 <a href="{{route('exams.edit',$exam->id)}}" class="btn btn-sm btn-outline-primary" rel="noopener noreferrer">
                     التعديل
                 </a>
-            </td>
+            </td> --}}
             <td>
                 <form action="{{route('exams.destroy',$exam->id)}}" method="post">
                     @csrf
